@@ -1,24 +1,43 @@
-<script setup>
+<template>
+  <div>
+    <div style="display: flex;">
+      <input v-model="username" type="text" placeholder="username" />
+      <input v-model="email" type="text" placeholder="email" />
+      <input v-model="password" type="password" placeholder="password" />
+    </div>
+    <button @click="register_(username, email, password)">Register</button>
+    <button @click="login_(username, password)">Login</button>
+    <button @click="logout_()">Logout</button>
+  </div>
+</template>
+
+<script>
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+import { register, login, logout } from './api';
+
+export default {
+  data() {
+    return {
+      username: '',
+      email: '',
+      password: '',
+    }
+  },
+  methods: {
+    async register_(username, email, password) {
+      await register(username, email, password);
+    },
+    async login_(username, password) {
+      await login(username, password);
+    },
+    async logout_() {
+      await logout();
+    }
+  }
+};
+
 </script>
-
-<template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
-
-  <RouterView />
-</template>
 
 <style scoped>
 header {
