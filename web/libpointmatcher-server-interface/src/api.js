@@ -42,13 +42,6 @@ export const register = async (name, email, password) => {
 };
 
 export const logout = async () => {
-    const request = new Request(`${endpoint}/logout`, {
-      method: "POST",
-      headers: {
-        "x-token": Cookies.get("token"),
-      },
-    });
-    const response = await fetch(request);
+    // À modifier
     Cookies.remove("token");
-    return response;
   };

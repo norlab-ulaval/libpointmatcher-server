@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import db.mongo as mongo
 from db.users_mongo import UsersMongo
 from user.user_controller import UserController
-from routers import example
+from routers import example, auth, configs
 
 
 env = os.environ
@@ -21,6 +21,8 @@ example.user_controller = user_controller
 # Build app
 app = FastAPI()
 app.include_router(example.router)
+app.include_router(auth.router)
+app.include_router(configs.router)
 
 origins = [
     "http://localhost:5173",
