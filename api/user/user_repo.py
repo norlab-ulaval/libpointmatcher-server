@@ -1,4 +1,4 @@
-from api.user.user import User
+from user.user import User
 
 
 class UserRepo:
