@@ -2,7 +2,7 @@ from fastapi import FastAPI, Header, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Annotated
 from datetime import timedelta
-from auth.auth import register, authenticate_user, create_access_token, oauth2_scheme
+from auth.auth import register, authenticate_user, create_access_token, get_current_active_user
 from interface.InterfaceModels import Token, RegisteringUser
 from database import db
 
@@ -46,5 +46,5 @@ async def login_for_access_token(form_data: RegisteringUser):
     return {"access_token": access_token, "token_type": "bearer"}
 
 @app.get("/configs")
-def get_configs(x_token: Annotated[str | None, Header(), Depends(oauth2_scheme)] = None):
+def get_configs(x_token: Annotated[str | None, Header(), Depends(get_current_active_user)] = None):
     return {"configs": "configs"}
