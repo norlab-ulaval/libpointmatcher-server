@@ -1,7 +1,7 @@
 from motor.core import AgnosticDatabase, AgnosticCollection
 
-from api.user.user import User
-from api.user.user_repo import UserRepo
+from user.user import User
+from user.user_repo import UserRepo
 
 
 class UsersMongo(UserRepo):

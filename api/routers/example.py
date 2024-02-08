@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from api.user.user_controller import UserController
+from user.user_controller import UserController
 
 
 user_controller: UserController
