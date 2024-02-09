@@ -1,6 +1,6 @@
 <template>
     <div class="flex items-center justify-center min-h-screen ">
-      <div class="relative w-full max-w-md p-6 bg-white rounded-lg shadow-md">
+      <div class="relative w-96 max-w-md p-6 bg-white rounded-lg shadow-md">
         <div class="absolute left-1/2 transform -translate-x-1/2" style="top: -4rem;">
             <img src="/public/logo.png" alt="logo" class="h-24 w-24">
         </div>
@@ -24,7 +24,7 @@
   
         <p class="mt-6 text-center text-lg">
           Don't have an account yet?
-          <router-link to="/signup" class="text-black opacity-70 hover:text-gray-500">Sign up</router-link>
+          <a @click.prevent="showSignUp" class="text-black opacity-70 hover:text-gray-500 cursor-pointer">Sign up</a>
         </p>
       </div>
     </div>
@@ -43,18 +43,12 @@
       };
     },
     methods: {
-      handleSubmit() {
+        handleSubmit() {
         this.$emit('login-event', { email: this.email, password: this.password });
-      }
+        },
+        showSignUp() {
+        this.$emit('toggle-signup');
+        },
     }
   };
   </script>
-
-<style>
-body {
-  background: linear-gradient(to top, white, #CDCDCD);
-  margin: 0;
-  height: 100%;
-  width: 100%;
-}
-</style>
