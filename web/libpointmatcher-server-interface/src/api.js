@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie'
 
-const endpoint = 'http://localhost:8000';
+const endpoint = import.meta.env.API_URI;
 
 export const register = async (name, email, password) => {
   try {
