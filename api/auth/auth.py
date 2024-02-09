@@ -12,10 +12,10 @@ ALGORITHM = "HS256"
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-def register(username, email, password):
+# def register(username, email, password):
     # Temporaire en attendant le setup de la db
-    hashed_password = get_password_hash(password)
-    db[username] = {"username": username, "email": email, "hashed_password": hashed_password}
+    # hashed_password = get_password_hash(password)
+    # db[username] = {"username": username, "email": email, "hashed_password": hashed_password}
 
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
