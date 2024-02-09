@@ -24,9 +24,7 @@ app.include_router(example.router)
 app.include_router(auth.router)
 app.include_router(configs.router)
 
-origins = [
-    "http://localhost:5173",
-]
+origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,

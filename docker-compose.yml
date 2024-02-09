@@ -1,16 +1,16 @@
 services:
-#  web:
-#    build:
-#      context: ./web/libpointmatcher-server-interface
-#    ports:
-#      - "8000:5173"
-#    depends_on:
-#      api:
-#        condition: service_started
-#    networks:
-#      - internal
-#    environment:
-#      API_URI: "http://api:8080/"
+  web:
+    build:
+      context: ./web/libpointmatcher-server-interface
+    ports:
+      - "8000:8000"
+    depends_on:
+      api:
+        condition: service_started
+    networks:
+      - internal
+    environment:
+      API_URI: "http://api:8080/"
 
   api:
     build:
