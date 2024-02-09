@@ -9,8 +9,12 @@ class TokenData(BaseModel):
     email: str | None = None
 
 class RegisteringUser(BaseModel):
-    username: str or None = None
+    username: str
     email: str
+    password: str
+
+class LoginUser(BaseModel):
+    username: str
     password: str
 
 class User(BaseModel):
