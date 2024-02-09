@@ -1,35 +1,52 @@
 <template>
   <div>
-    <div style="display: flex;">
-      <input v-model="username" type="text" placeholder="username" />
-      <input v-model="email" type="text" placeholder="email" />
-      <input v-model="password" type="password" placeholder="password" />
-    </div>
-    <button @click="register_(username, email, password)">Register</button>
-    <button @click="login_(username, password)">Login</button>
-    <button @click="logout_()">Logout</button>
+    <SignIn @login-event="login_" :loginError="loginErrorMessage" v-if="!showSignUp" @toggle-signup="toggleSignUp" />
+    <SignUp @signup-event="register_" :signUpError="signUpErrorMessage" v-else @back-to-signin="toggleSignUp" />
   </div>
 </template>
 
 <script>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import SignIn from './components/SignIn.vue';
+import SignUp from './components/SignUp.vue';
 import { register, login, logout } from './api';
 
 export default {
+  name: "app",
+  components: {
+    SignIn,
+    SignUp
+  },
   data() {
     return {
       username: '',
       email: '',
       password: '',
+      loginErrorMessage: '',
+      signUpErrorMessage: '',
+      showSignUp: false,
     }
   },
   methods: {
-    async register_(username, email, password) {
-      await register(username, email, password);
+    toggleSignUp() {
+      this.showSignUp = !this.showSignUp;
     },
-    async login_(username, password) {
-      await login(username, password);
+    async register_(username, email, password) {
+      const response = await register(username, email, password);
+      if (response.success) {
+        this.signUpErrorMessage = ''; 
+        this.$router.push('/home');
+      } else {
+        this.signUpErrorMessage = response.error;
+      }
+    },
+    async login_(email, password) {
+      const response = await login(email, password);
+    if (response.success) {
+      this.loginErrorMessage = '';
+      this.$router.push('/home');
+    } else {
+      this.loginErrorMessage = response.error;
+    }
     },
     async logout_() {
       await logout();
@@ -39,66 +56,11 @@ export default {
 
 </script>
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
+<style>
+body {
+  background: linear-gradient(to top, white, rgb(60 60 60 / 43%));
+  margin: 0;
+  height: 100%;
   width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
 }
 </style>
