@@ -3,7 +3,7 @@ from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
-from api.interface.interface_models import UserInDB, TokenData
+from interface.interface_models import UserInDB, TokenData
 from database import db
 
 SECRET_KEY = "faudrait générer une clé"
