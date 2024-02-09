@@ -1,22 +1,20 @@
 <template>
   <div>
-    <div style="display: flex;">
-      <input v-model="username" type="text" placeholder="username" />
-      <input v-model="email" type="text" placeholder="email" />
-      <input v-model="password" type="password" placeholder="password" />
-    </div>
-    <button @click="register_(username, email, password)">Register</button>
-    <button @click="login_(username, password)">Login</button>
-    <button @click="logout_()">Logout</button>
+    <SignIn/>
   </div>
 </template>
 
 <script>
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+import SignIn from './components/SignIn.vue';
 import { register, login, logout } from './api';
 
 export default {
+  name: "app",
+  components: {
+    SignIn
+  },
   data() {
     return {
       username: '',
@@ -39,7 +37,7 @@ export default {
 
 </script>
 
-<style scoped>
+<!-- <style scoped>
 header {
   line-height: 1.5;
   max-height: 100vh;
@@ -101,4 +99,4 @@ nav a:first-of-type {
     margin-top: 1rem;
   }
 }
-</style>
+</style> -->
