@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, status
 from datetime import timedelta
 
 from auth.auth import register, authenticate_user, create_access_token
-from api.interface.interface_models import Token, RegisteringUser
+from interface.interface_models import Token, RegisteringUser
 from database import db
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
