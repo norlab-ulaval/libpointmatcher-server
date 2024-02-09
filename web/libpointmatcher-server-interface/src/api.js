@@ -3,21 +3,22 @@ import Cookies from 'js-cookie'
 const endpoint = 'http://localhost:8000';
 
 export const register = async (name, email, password) => {
+  try {
     const request = new Request(`${endpoint}/register`, {
       method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        username: name,
-        email: email,
-        password: password,
-      }),
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ username: name, email, email, password: password }),
     });
     const response = await fetch(request);
+    if (!response.ok) {
+      throw new Error("Failed to register. Please try again.");
+    }
     const jsonResponse = await response.json();
-    console.log(jsonResponse);
-    return jsonResponse;
+    return { success: true };
+  } catch (error) {
+    console.error(error);
+    return { success: false, error: error.message || "An error occurred during registration." };
+  }
 };
 
 export const login = async (email, password) => {
