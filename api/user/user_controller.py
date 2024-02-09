@@ -15,17 +15,17 @@ class UserController:
     async def get_all_users(self) -> list[User]:
         return await self.user_repo.find_all()
 
-    async def find_username(self, username: str) -> User:
-        return await self.user_repo.find_username()
+    async def find_by_username(self, username: str) -> User:
+        return await self.user_repo.find_username(username)
     
     async def find_user(self, username: str, password: str) -> User:
-        return await self.user_repo.find()
+        return await self.user_repo.find(username, password)
     
     async def register(self, username: str, email: str, password: str):
         hashed_password = get_password_hash(password)
-        user = await self.find_username(username)
+        user = await self.find_by_username(username)
         if user is None:
-            await self.user_repo.add(username, email, hashed_password)
+            await self.user_repo.add_user(username, email, hashed_password)
         else:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail="Username already used")

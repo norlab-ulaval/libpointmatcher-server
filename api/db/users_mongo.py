@@ -13,14 +13,11 @@ class UsersMongo(UserRepo):
         cursor = self.users_collection.find()
         return await cursor.to_list(length=None)
     
-    async def find(self) -> User:
-        print("find")
+    async def find(self, username: str, password: str) -> User:
         pass
 
-    async def find_username(self) -> User:
-        print("find_username")
+    async def find_username(self, username: str) -> User:
         pass
 
-    async def add(self, username: str, email: str, password: str) -> User:
-        print("add")
+    async def add_user(self, username: str, email: str, password: str) -> User:
         pass
