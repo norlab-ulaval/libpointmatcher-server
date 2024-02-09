@@ -27,7 +27,7 @@
             <input type="password" id="passwordConfirm" v-model="passwordConfirm" required class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
           </div>
   
-          <p v-if="passwordError" class="error-message text-red-500">{{ password }}</p>
+          <p v-if="passwordError" class="error-message text-red-500">{{ passwordError }}</p>
           <p v-if="signUpErrorError" class="error-message text-red-500">{{ signUpError }}</p>
           
           <button type="submit" class="w-full px-5 py-3 font-bold text-white bg-black rounded-md text-lg hover:bg-gray-700">Sign up</button>
