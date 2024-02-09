@@ -7,7 +7,7 @@ export const register = async (name, email, password) => {
     const request = new Request(`${endpoint}/register`, {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ username: name, email, email, password: password }),
+      body: JSON.stringify({ username: name, email: email, password: password }),
     });
     const response = await fetch(request);
     if (!response.ok) {

@@ -28,7 +28,7 @@
           </div>
   
           <p v-if="passwordError" class="error-message text-red-500">{{ passwordError }}</p>
-          <p v-if="signUpErrorError" class="error-message text-red-500">{{ signUpError }}</p>
+          <p v-if="signUpError" class="error-message text-red-500">{{ signUpError }}</p>
           
           <button type="submit" class="w-full px-5 py-3 font-bold text-white bg-black rounded-md text-lg hover:bg-gray-700">Sign up</button>
 
