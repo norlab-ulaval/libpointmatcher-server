@@ -22,15 +22,6 @@ def get_user(db, username: str):
     if username in db:
         user_data = db[username]
         return UserInDB(**user_data)
-    
-def authenticate_user(db, username: str, password: str):
-    user = get_user(db, username)
-    if not user:
-        return False
-    if not verify_password(password, user.hashed_password):
-        return False
-
-    return user
 
 def create_access_token(data: dict, expires_delta: timedelta or None = None):
     to_encode = data.copy()
