@@ -1,14 +1,11 @@
 from user.user import User
 from user.user_repo import UserRepo
-from auth.auth import get_password_hash, create_access_token
+from auth.auth import get_password_hash
+from auth.token import create_access_token
 from fastapi import HTTPException, status
-from datetime import datetime, timedelta
 
 
 class UserController:
-    
-    ACCESS_TOKEN_EXPIRE_MINUTES = 60
-
     def __init__(self, user_repo: UserRepo):
         self.user_repo = user_repo
 
@@ -36,7 +33,4 @@ class UserController:
         if user is None:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Incorrect username or password", headers={"WWW-Authenticate": "Bearer"})
-        access_token_expires = timedelta(minutes=self.ACCESS_TOKEN_EXPIRE_MINUTES)
-        access_token = create_access_token(
-            data={"sub": user.username}, expires_delta=access_token_expires)
-        return {"access_token": access_token, "token_type": "bearer"}
+        return create_access_token(user)
