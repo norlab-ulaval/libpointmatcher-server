@@ -17,6 +17,7 @@ user_repo = UsersMongo(mongo_database)
 user_controller = UserController(user_repo)
 
 example.user_controller = user_controller
+auth.user_controller = user_controller
 
 # Build app
 app = FastAPI()
