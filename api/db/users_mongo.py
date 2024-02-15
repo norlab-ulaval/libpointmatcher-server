@@ -14,10 +14,21 @@ class UsersMongo(UserRepo):
         return await cursor.to_list(length=None)
     
     async def find(self, username: str, password: str) -> User:
-        pass
+        user_document = await self.users_collection.find_one({"username": username, "password": password})
+        if user_document:
+            return User(user_document["username"], user_document["email"], user_document["password"])
+        return None
 
     async def find_username(self, username: str) -> User:
-        pass
+        user_document = await self.users_collection.find_one({"username": username})
+        if user_document:
+            return User(user_document["username"], user_document["email"], user_document["password"])
+        return None
 
-    async def add_user(self, username: str, email: str, password: str) -> User:
-        pass
+    async def add_user(self, username: str, email: str, password: str):
+        user_json = {
+            "username": username,
+            "email": email,
+            "password": password
+        }
+        await self.users_collection.insert_one(user_json)
