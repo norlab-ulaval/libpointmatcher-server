@@ -1,10 +1,11 @@
 from fastapi import APIRouter, Header, Depends
 from typing import Annotated
 
-from auth.auth import get_current_active_user
+from auth.auth import get_current_user
+from interface.interface_models import User
 
 router = APIRouter()
 
 @router.get("/configs")
-def get_configs(x_token: Annotated[str | None, Header(), Depends(get_current_active_user)] = None):
+def get_configs(user: Annotated[User, Depends(get_current_user)]):
     return {"configs": "configs"}
