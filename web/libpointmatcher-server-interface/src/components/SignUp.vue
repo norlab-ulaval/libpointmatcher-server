@@ -64,7 +64,7 @@
           this.passwordError = "Passwords do not match.";
           return;
         }
-        this.$emit('signup-event', { username: this.username, email: this.email, password: this.password });
+        this.$emit('signup-event', this.username, this.email, this.password);
       }
     }
   };

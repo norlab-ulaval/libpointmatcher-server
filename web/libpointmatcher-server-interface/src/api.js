@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie'
 
-const endpoint = import.meta.env.API_URI;
+const endpoint = import.meta.env.VITE_API_URI;
 
 export const register = async (name, email, password) => {
   try {
@@ -22,13 +22,14 @@ export const register = async (name, email, password) => {
 };
 
 export const login = async (email, password) => {
+  const formData = new FormData();
+  formData.append("username", email);
+  formData.append("password", password);
+  
   try {
     const request = new Request(`${endpoint}/login`, {
       method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
+      body: formData,
     });
 
     const response = await fetch(request);
