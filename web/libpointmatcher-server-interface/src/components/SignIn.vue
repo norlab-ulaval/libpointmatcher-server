@@ -44,7 +44,7 @@
     },
     methods: {
         handleSubmit() {
-        this.$emit('login-event', { email: this.email, password: this.password });
+        this.$emit('login-event', this.email, this.password);
         },
         showSignUp() {
         this.$emit('toggle-signup');

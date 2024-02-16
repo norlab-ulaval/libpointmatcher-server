@@ -10,7 +10,7 @@ services:
     networks:
       - internal
     environment:
-      API_URI: "http://api:8080/"
+      VITE_API_URI: "http://api:8080"
 
   api:
     build:
