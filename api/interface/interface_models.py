@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 class Token(BaseModel):
     access_token: str
@@ -24,3 +24,17 @@ class User(BaseModel):
 class UserInDB(User):
     hashed_password: str
     # yaml configs??
+
+class LeaderboardQuery(BaseModel):
+    page: int = 1
+    limit: int = 10
+    
+class LeaderboardEntry(BaseModel):
+    username: str
+    score: int
+    version: str
+    date: str
+
+class Leaderboard(BaseModel):
+    entries: list[LeaderboardEntry] = Field(default_factory=list)
+    total: int
