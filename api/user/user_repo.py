@@ -11,5 +11,8 @@ class UserRepo:
     async def find_username(self, username: str) -> User:
         pass
 
+    async def find_email(self, email: str) -> User:
+        pass
+
     async def add_user(self, username: str, email: str, password: str) -> User:
         pass
