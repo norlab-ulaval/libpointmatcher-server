@@ -28,10 +28,12 @@ class UserInDB(User):
 class LeaderboardQuery(BaseModel):
     page: int = 1
     limit: int = 10
+    type: str = "all"
     
 class LeaderboardEntry(BaseModel):
     username: str
     score: int
+    score_type: str
     version: str
     date: str
 
