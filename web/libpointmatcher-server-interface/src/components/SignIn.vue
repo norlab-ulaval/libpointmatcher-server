@@ -1,4 +1,5 @@
 <template>
+    
     <div class="flex items-center justify-center min-h-screen ">
       <div class="relative w-96 max-w-md p-6 bg-white rounded-lg shadow-md">
         <div class="absolute left-1/2 transform -translate-x-1/2" style="top: -4rem;">
@@ -52,3 +53,4 @@
     }
   };
   </script>
+
