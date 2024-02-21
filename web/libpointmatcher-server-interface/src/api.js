@@ -39,7 +39,7 @@ export const login = async (email, password) => {
     const jsonResponse = await response.json();
 
     if (response.ok) {
-      Cookies.set("token", jsonResponse.token, { expires: 1 }, { secure: true });
+      Cookies.set("token", jsonResponse.access_token, { expires: 1 }, { secure: true });
       return { success: true };
     } else {
       return { success: false, error: jsonResponse.detail || "Login failed"};
