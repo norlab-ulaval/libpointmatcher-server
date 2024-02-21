@@ -31,6 +31,12 @@ class UsersMongo(UserRepo):
             return User(user_document["username"], user_document["email"], user_document["password"])
         return None
 
+    async def does_user_exist(self, username=None, email=None) -> bool:
+        user_username = await self.find_username(username) if username is not None else None
+        user_email = await self.find_email(email) if email is not None else None
+
+        return user_username is not None or user_email is not None
+
     async def add_user(self, username: str, email: str, password: str):
         user_json = {
             "username": username,
