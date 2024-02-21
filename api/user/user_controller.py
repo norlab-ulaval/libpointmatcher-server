@@ -20,21 +20,24 @@ class UserController:
         return await self.user_repo.find_email(email)
     
     async def find_user(self, email: str, password: str) -> User:
-        return await self.user_repo.find(email, password)         
-    
+        return await self.user_repo.find(email, password)
+
+    async def does_user_exist(self, username=None, email=None) -> bool:
+        user_username = await self.find_by_username(username) if username is not None else None
+        user_email = await self.find_by_email(email) if email is not None else None
+
+        return user_username is not None or user_email is not None
+
     async def register(self, username: str, email: str, password: str):
-        hashed_password = get_password_hash(password)
-        user_username = await self.find_by_username(username)
-        user_email = await self.find_by_email(email)
-        
-        if user_username is not None:
+        if await self.does_user_exist(username=username):
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                                 detail="Username already used")
-        elif user_email is not None:
+        elif await self.does_user_exist(email=email):
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                                 detail="Email already used")
         else:
             validate(username, email, password)
+            hashed_password = get_password_hash(password)
             await self.user_repo.add_user(username, email, hashed_password)
     
     async def authenticate(self, email: str, password: str) -> dict:
