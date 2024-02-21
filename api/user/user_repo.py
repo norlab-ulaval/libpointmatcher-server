@@ -16,3 +16,6 @@ class UserRepo:
 
     async def add_user(self, username: str, email: str, password: str) -> User:
         pass
+
+    async def does_user_exist(self, username=None, email=None) -> bool:
+        pass

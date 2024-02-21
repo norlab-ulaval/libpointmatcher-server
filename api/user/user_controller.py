@@ -1,6 +1,7 @@
 from user.user import User
 from user.user_repo import UserRepo
 from auth.auth import get_password_hash, verify_password
+from user.user_validation import validate
 from auth.token import create_access_token
 from fastapi import HTTPException, status
 
@@ -20,15 +21,18 @@ class UserController:
     
     async def find_user(self, email: str, password: str) -> User:
         return await self.user_repo.find(email, password)
-    
+
     async def register(self, username: str, email: str, password: str):
-        hashed_password = get_password_hash(password)
-        user = await self.find_by_username(username)
-        if user is None:
-            await self.user_repo.add_user(username, email, hashed_password)
-        else:
+        if await self.user_repo.does_user_exist(username=username):
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                                 detail="Username already used")
+        elif await self.user_repo.does_user_exist(email=email):
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                                detail="Email already used")
+        else:
+            validate(username, email, password)
+            hashed_password = get_password_hash(password)
+            await self.user_repo.add_user(username, email, hashed_password)
     
     async def authenticate(self, email: str, password: str) -> dict:
         user = await self.find_by_email(email)
