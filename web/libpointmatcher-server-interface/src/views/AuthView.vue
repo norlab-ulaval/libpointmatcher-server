@@ -7,8 +7,8 @@
   </template>
   
   <script>
-  import SignIn from '../components/SignIn.vue';
-  import SignUp from '../components/SignUp.vue';
+  import SignIn from '../components/Auth/SignIn.vue';
+  import SignUp from '../components/Auth/SignUp.vue';
   import ToastNotification from '../components/ui/ToastNotification.vue';
   import { register, login, logout } from '../api';
   

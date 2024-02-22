@@ -64,8 +64,8 @@
   </template>
   
   <script>
-  import EyeOpenIcon from './icons/IconEyeOpen.vue'
-  import EyeSlashIcon from './icons/IconEyeSlash.vue'
+  import EyeOpenIcon from '../icons/IconEyeOpen.vue'
+  import EyeSlashIcon from '../icons/IconEyeSlash.vue'
   export default {
     components: {
       EyeOpenIcon,
