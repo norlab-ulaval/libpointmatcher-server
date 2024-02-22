@@ -55,7 +55,10 @@
             this.showSignUp = false;
             this.displayToast('Account successfully created. Please sign in.');
         } else {
+            console.log('erreur')
+            console.log(response.error)  
           this.signUpErrorMessage = response.error;
+          console.log(this.signUpErrorMessage)
         }
       },
       async login_(email, password) {
@@ -64,6 +67,8 @@
         this.loginErrorMessage = '';
         this.$router.push({ name: 'home'});
       } else {
+        
+
         this.loginErrorMessage = response.error;
       }
       },

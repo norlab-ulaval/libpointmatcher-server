@@ -10,16 +10,20 @@ export const register = async (name, email, password) => {
       body: JSON.stringify({ username: name, email: email, password: password }),
     });
     const response = await fetch(request);
-    if (!response.ok) {
-      throw new Error("Failed to register. Please try again.");
-    }
+    
     const jsonResponse = await response.json();
+
+    if (!response.ok) {
+      throw new Error(jsonResponse.detail || "Failed to register. Please try again.");
+    }
+
     return { success: true };
   } catch (error) {
     console.error(error);
-    return { success: false, error: error.message || "An error occurred during registration." };
+    return { success: false, error: error.message };
   }
 };
+
 
 export const login = async (email, password) => {
   const formData = new FormData();

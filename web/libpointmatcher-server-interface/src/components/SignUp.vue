@@ -9,26 +9,36 @@
   
           <div class="mb-4">
             <label for="username" class="block text-lg font-medium text-gray-700">Username</label>
-            <input type="text" id="username" v-model="username" required class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
+            <input type="text" id="username" v-model="username" required 
+            class="mt-2 block w-full px-4 py-3 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            :class="[{'border-red-500': usernameError, 'border-gray-300': !usernameError}]" />
+            <p v-if="usernameError" class="mt-2 text-sm text-red-600">{{ usernameError }}</p>
           </div>
   
           <div class="mb-4">
             <label for="email" class="block text-lg font-medium text-gray-700">Email</label>
-            <input type="email" id="email" v-model="email" required class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
+            <input type="text" id="email" v-model="email" @blur="validateEmail" 
+            class="mt-2 block w-full px-4 py-3 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            :class="[{'border-red-500': emailError, 'border-gray-300': !emailError}]" />
+            <p v-if="emailError" class="mt-2 text-sm text-red-600">{{ emailError }}</p>
           </div>
   
           <div class="mb-4">
             <label for="password" class="block text-lg font-medium text-gray-700">Password</label>
-            <input type="password" id="password" v-model="password" required class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
+            <input type="password" id="password" v-model="password" @blur="validatePassword" 
+            class="mt-2 block w-full px-4 py-3 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            :class="[{'border-red-500': passwordError, 'border-gray-300': !passwordError}]" />
           </div>
   
           <div class="mb-6">
             <label for="passwordConfirm" class="block text-lg font-medium text-gray-700">Confirm Password</label>
-            <input type="password" id="passwordConfirm" v-model="passwordConfirm" required class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" />
+            <input type="password" id="passwordConfirm" v-model="passwordConfirm" @blur="validatePassword" 
+            class="mt-2 block w-full px-4 py-3 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            :class="[{'border-red-500': passwordError, 'border-gray-300': !passwordError}]" />
+            <p v-if="passwordError" class="mt-2 text-sm text-red-600">{{ passwordError }}</p>
           </div>
   
-          <p v-if="passwordError" class="error-message text-red-500">{{ passwordError }}</p>
-          <p v-if="signUpError" class="error-message text-red-500">{{ signUpError }}</p>
+          <p v-if="signUpError" class="mt-2 text-base text-center text-red-600">{{ signUpError }}</p>
           
           <button type="submit" class="w-full px-5 py-3 font-bold text-white bg-black rounded-md text-lg hover:bg-gray-700">Sign up</button>
 
@@ -53,15 +63,37 @@
         password: '',
         passwordConfirm: '',
         passwordError: '',
+        emailError: '',
+        usernameError: '',
       };
     },
     methods: {
-    showSignIn() {
-      this.$emit('back-to-signin');
-    },
+      validateUsername() {
+        const pattern = new RegExp('.{2,}');
+        this.usernameError = pattern.test(this.username) ? '' : 'Username must be at least 2 characters.';
+      },
+      validateEmail() {
+        const pattern = new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$');
+        this.emailError = pattern.test(this.email) ? '' : 'Please enter a valid email address.';
+      },
+      validatePassword() {
+        const pattern = new RegExp('^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$');
+        if (!pattern.test(this.password)) {
+          this.passwordError = 'Password must be at least 8 characters and include upper case, lower case, number, and special character.';
+        } else if (this.password !== this.passwordConfirm) {
+          this.passwordError = 'Passwords do not match.';
+        } else {
+          this.passwordError = '';
+        }
+      },
+      showSignIn() {
+        this.$emit('back-to-signin');
+      },
       handleSubmit() {
-        if (this.password !== this.passwordConfirm) {
-          this.passwordError = "Passwords do not match.";
+        this.validateUsername();
+        this.validateEmail();
+        this.validatePassword();
+        if (this.usernameError || this.emailError || this.passwordError) {
           return;
         }
         this.$emit('signup-event', this.username, this.email, this.password);
