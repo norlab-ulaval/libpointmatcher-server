@@ -39,7 +39,7 @@
             <p v-if="passwordError" class="mt-2 text-sm text-red-600">{{ passwordError }}</p>
           </div>
   
-          <p v-if="loginError" class="error-message text-red-500">{{ loginError }}</p>
+          <p v-if="loginError" class="mt-2 text-sm text-center text-red-600"> {{ loginError }}</p>
         
           <button type="submit" class="w-full px-5 py-3 font-bold text-white bg-black rounded-md text-lg hover:bg-gray-700">Sign in</button>
         </form>

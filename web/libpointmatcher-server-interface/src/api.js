@@ -31,19 +31,18 @@ export const login = async (email, password) => {
   formData.append("password", password);
   
   try {
-    const request = new Request(`${endpoint}/login`, {
+    const response = await fetch(`${endpoint}/login`, {
       method: "POST",
       body: formData,
     });
 
-    const response = await fetch(request);
     const jsonResponse = await response.json();
 
     if (response.ok) {
       Cookies.set("token", jsonResponse.token, { expires: 1 });
       return { success: true };
     } else {
-      return { success: false, error: jsonResponse.message || "Login failed"};
+      return { success: false, error: jsonResponse.detail || "Login failed"};
     }
   } catch (error) {
     return { success: false, error: "Network error or server is unreachable." };
