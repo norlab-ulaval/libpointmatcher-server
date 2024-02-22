@@ -47,6 +47,7 @@
     methods: {
       toggleSignUp() {
         this.showSignUp = !this.showSignUp;
+        this.clearErrors();
       },
       async register_(username, email, password) {
         const response = await register(username, email, password);
@@ -77,6 +78,11 @@
         this.showToast = false;
         }, 3000);
       },
+        clearErrors() {
+            console.log("Clearing errors");
+            this.loginErrorMessage = '';
+            this.signUpErrorMessage = '';
+        },
     }
   };
   

@@ -81,9 +81,9 @@
         this.$emit('login-event', this.email, this.password);
       },
       showSignUp() {
-      this.$emit('toggle-signup');
+        this.$emit('toggle-signup');
       },
-    }
+    },
   };
   </script>
 

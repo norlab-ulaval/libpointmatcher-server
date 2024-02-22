@@ -118,6 +118,10 @@
         }
         this.$emit('signup-event', this.username, this.email, this.password);
       }
+    },
+    beforeRouteLeave(to, from, next) {
+      this.$emit('clear-errors');
+      next();
     }
   };
   </script>
