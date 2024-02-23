@@ -50,8 +50,29 @@ export const login = async (email, password) => {
 };
 
 export const logout = async () => {
-    // À modifier
-    Cookies.remove("token");
+  const token = Cookies.get("token");
+  
+  try {
+    const request = new Request(`${endpoint}/logout`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+
+    const response = await fetch(request);
+    const jsonResponse = await response.json();
+
+    if (response.ok) {
+      Cookies.remove("token");
+      return { success: true };
+    }
+    else {
+      return { success: false, error: jsonResponse.detail || "Failed to logout." };
+    }
+  } catch (error) {
+    return { success: false, error: "Network error or server is unreachable." };
+  }
 };
 
 export const getLeaderboard = async (page, limit, type) => {
@@ -75,8 +96,9 @@ export const getLeaderboard = async (page, limit, type) => {
     }
     else {
       return { success: false, error: jsonResponse.detail || "Failed to fetch leaderboard." };
+
     }
   } catch (error) {
     return { success: false, error: "Network error or server is unreachable." };
   }
-}
+};

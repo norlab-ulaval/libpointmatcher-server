@@ -2,7 +2,7 @@ from user.user import User
 from user.user_repo import UserRepo
 from auth.auth import get_password_hash, verify_password
 from user.user_validation import validate
-from auth.token import create_access_token
+from auth.token import create_access_token, remove_token
 from fastapi import HTTPException, status
 
 
@@ -43,3 +43,10 @@ class UserController:
     
         access_token = create_access_token(user)
         return {"access_token": access_token, "token_type": "bearer"}
+    
+    async def logout(self, user: User):
+        if remove_token(user.email) is None:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                                detail="Could not logout user")    
+            
+        return {"message": "User logged out successfully"}

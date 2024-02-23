@@ -31,7 +31,7 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
     if token_data is None:
         raise credential_exception
 
-    user = get_user(db, username=token_data.username) # TODO: connect with user_controler to get user from db
+    user = get_user(db, username=token_data.email) # TODO: connect with user_controler to get user from db
     if user is None:
         raise credential_exception
 
