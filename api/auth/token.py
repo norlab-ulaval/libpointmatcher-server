@@ -37,7 +37,7 @@ def get_validated_tokenData(token: str) -> TokenData | None:
     except JWTError:
         return None
     
-def remove_token(email: str) ->  True | None:
+def remove_token(email: str) ->  bool | None:
     if not redis_client.exists(email):
         return None
     
