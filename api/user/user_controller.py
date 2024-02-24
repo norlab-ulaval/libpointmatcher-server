@@ -2,7 +2,7 @@ from user.user import User
 from user.user_repo import UserRepo
 from auth.auth import get_password_hash, verify_password
 from user.user_validation import validate
-from auth.token import create_access_token, remove_token
+from auth.token import create_access_token, remove_token, get_validated_email
 from fastapi import HTTPException, status
 
 
@@ -50,3 +50,17 @@ class UserController:
                                 detail="Could not logout user")    
             
         return {"message": "User logged out successfully"}
+    
+    def get_current_user(self, token: str):
+        credential_exception = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                                            detail="Could not validate credentials", headers={"WWW-Authenticate": "Bearer"})
+        
+        email = get_validated_email(token)
+        if email is None:
+            raise credential_exception
+
+        user = self.find_by_email(email)
+        if user is None:
+            raise credential_exception
+
+        return user
