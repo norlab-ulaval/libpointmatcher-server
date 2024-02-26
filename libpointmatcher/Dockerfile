@@ -13,7 +13,7 @@ RUN apt update \
       libomp-dev libboost-all-dev libeigen3-dev libyaml-cpp-dev \
       ninja-build \
       python3-pip \
-    && apt clean
+  && apt clean
 
 # Virtual environment
 RUN pip install virtualenv
@@ -24,7 +24,8 @@ RUN virtualenv venv \
     	build \
     	numpy \
     	pytest \
-    	wheel
+    	wheel \
+        websockets
     
 # Modify the PATH environment variable to include the virtual environment's bin directory.
 ENV PATH="/venv/bin:$PATH"
@@ -53,15 +54,17 @@ RUN cd /libraries \
 
 # libpointmatcher
 RUN cd /libraries \
-	&& git clone -b project/server-eval https://github.com/norlab-ulaval/libpointmatcher.git \
+	&& git clone -b agagnon/project/server-eval https://github.com/norlab-ulaval/libpointmatcher.git \
 	&& cd libpointmatcher/ \
 	&& mkdir build && cd build/ \
 	&& cmake -DCMAKE_BUILD_TYPE=Release -DPOINTMATCHER_BUILD_EXAMPLES=OFF \
 		 -DPOINTMATCHER_BUILD_EVALUATIONS=OFF \
 		 -DBUILD_PYTHON_MODULE=ON \
-		 -DUSE_OPEN_MP=TRUE .. \
-	&& make -j 12 \
+		 -DUSE_OPEN_MP=FALSE \
+		 -D EVALUATION=TRUE .. \
+	&& make -j 4 \
 	&& make install
+	
 # libpointmatcher python bindings
 RUN cd /libraries/libpointmatcher/python/ \
 	&& python -m build --wheel --no-isolation --outdir ./dist \
