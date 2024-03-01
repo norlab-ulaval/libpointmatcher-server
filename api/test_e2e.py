@@ -12,15 +12,16 @@ TEST_USER = 'test_user'
 client = TestClient(app)
 
 
-
 @pytest.fixture(autouse=True)
 async def run_around_tests():
     await remove_test_user()
+
 
 @pytest.mark.anyio
 async def test_hello_world(client: AsyncClient):
     response = await client.get('/')
     assert response.status_code == 200
+
 
 @pytest.mark.anyio
 async def test_register_then_login_with_success(client: AsyncClient):
