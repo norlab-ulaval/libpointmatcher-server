@@ -1,11 +1,14 @@
-from fastapi import APIRouter, Header, Depends
+from fastapi import APIRouter, Depends
 from typing import Annotated
 
-from auth.auth import get_current_user
 from interface.interface_models import User
+from user.user_controller import UserController
+from routers.util.authorization import get_authorized_user
+
+user_controller: UserController
 
 router = APIRouter()
 
 @router.get("/configs")
-def get_configs(user: Annotated[User, Depends(get_current_user)]):
+def get_configs(user: Annotated[User, Depends(get_authorized_user)]):
     return {"configs": "configs"}

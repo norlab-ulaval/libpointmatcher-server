@@ -1,7 +1,7 @@
 import redis
 from datetime import datetime, timedelta
 from jose import jwt, JWTError
-from interface.interface_models import TokenData, User
+from interface.interface_models import User
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 SECRET_KEY = "faudrait générer une clé"
@@ -21,7 +21,7 @@ def create_access_token(user: User) -> str:
 
     return encoded_jwt
 
-def get_validated_tokenData(token: str) -> TokenData | None:
+def get_validated_email(token: str) -> str | None:
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         email: str = payload.get("sub")
@@ -32,7 +32,7 @@ def get_validated_tokenData(token: str) -> TokenData | None:
         if token is None:
             return None
 
-        return TokenData(email=email)
+        return email
     
     except JWTError:
         return None
