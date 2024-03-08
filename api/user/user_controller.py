@@ -51,7 +51,7 @@ class UserController:
             
         return {"message": "User logged out successfully"}
     
-    def get_current_user(self, token: str):
+    async def get_current_user(self, token: str):
         credential_exception = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                                             detail="Could not validate credentials", headers={"WWW-Authenticate": "Bearer"})
         
@@ -59,7 +59,7 @@ class UserController:
         if email is None:
             raise credential_exception
 
-        user = self.find_by_email(email)
+        user = await self.find_by_email(email)
         if user is None:
             raise credential_exception
 
