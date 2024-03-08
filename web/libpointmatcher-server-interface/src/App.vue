@@ -1,7 +1,9 @@
 <template>
-  <div id="app">
+  <div id="app" class="flex flex-col h-screen">
     <Navbar v-if="$route.name !== 'auth'" />
-    <router-view></router-view>
+    <main class="flex-grow w-full">
+      <router-view></router-view>
+    </main>
   </div>
 </template>
 
@@ -9,6 +11,7 @@
 import Navbar from '@/components/layout/Navbar.vue';
 
 export default {
+  name: "app",
   components: {
     Navbar,
   }
