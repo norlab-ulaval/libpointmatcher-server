@@ -8,6 +8,7 @@ from db.users_mongo import UsersMongo
 from user.user_controller import UserController
 from leaderboard.leaderboard_controller import LeaderboardController
 from routers import example, auth, configs, leaderboard
+from routers.util import authorization
 
 
 env = os.environ
@@ -18,9 +19,11 @@ user_repo = UsersMongo(mongo_database)
 user_controller = UserController(user_repo)
 leaderboard_controller = LeaderboardController()
 
+authorization.user_controller = user_controller
 example.user_controller = user_controller
 auth.user_controller = user_controller
 leaderboard.leaderboard_controller = leaderboard_controller
+configs.user_controller = user_controller
 
 # Build app
 app = FastAPI()

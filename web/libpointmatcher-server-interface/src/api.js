@@ -38,20 +38,40 @@ export const login = async (email, password) => {
 
     const jsonResponse = await response.json();
 
-    if (response.ok) {
-      Cookies.set("token", jsonResponse.access_token, { expires: 1 }, { secure: true });
-      return { success: true };
-    } else {
-      return { success: false, error: jsonResponse.detail || "Login failed"};
-    }
+    if (!response.ok) {
+      throw new Error(jsonResponse.detail || "Login failed");
+    } 
+
+    Cookies.set("token", jsonResponse.access_token, { expires: 1 }, { secure: true });
+    return { success: true };
   } catch (error) {
-    return { success: false, error: "Network error or server is unreachable." };
+    return { success: false, error: error.message };
   }
 };
 
 export const logout = async () => {
-    // À modifier
+  const token = Cookies.get("token");
+  
+  try {
+    const request = new Request(`${endpoint}/logout`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+
+    const response = await fetch(request);
+    const jsonResponse = await response.json();
+
+    if (!response.ok) {
+      throw new Error(jsonResponse.detail || "Failed to logout.");
+    }
+
     Cookies.remove("token");
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: "Network error or server is unreachable." };
+  }
 };
 
 export const getLeaderboard = async (page, limit, type) => {
@@ -70,13 +90,12 @@ export const getLeaderboard = async (page, limit, type) => {
     const response = await fetch(request);
     const jsonResponse = await response.json();
 
-    if (response.ok) {
-      return { success: true, leaderboard: jsonResponse };
+    if (!response.ok) {
+      throw new Error(jsonResponse.detail || "Failed to fetch leaderboard.");
     }
-    else {
-      return { success: false, error: jsonResponse.detail || "Failed to fetch leaderboard." };
-    }
+    
+    return { success: true, leaderboard: jsonResponse };
   } catch (error) {
     return { success: false, error: "Network error or server is unreachable." };
   }
-}
+};
