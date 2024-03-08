@@ -4,8 +4,5 @@ class LeaderboardRepo:
     async def find_all(self) -> list[LeaderboardEntry]:
         pass
 
-    async def add_one(self, entry:LeaderboardEntry) -> None:
-        pass
-
     async def find_by_type(self, type: str) -> list[LeaderboardEntry]:
         pass

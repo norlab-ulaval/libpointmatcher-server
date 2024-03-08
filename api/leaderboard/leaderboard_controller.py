@@ -27,14 +27,6 @@ class LeaderboardController:
 
         return sorted_leaderboard[start_index:end_index]
 
-    async def post_entry(self, entry: LeaderboardEntry):
-        # TODO: Validation, and maybe make sure that the sender is the website?
-        try:
-            await self.leaderboard_repo.add_one(entry)
-        except:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                                detail="Could not logout user")
-
     def rank_leaderboard(self, leaderboard: list[LeaderboardEntry]) -> list[LeaderboardEntry]:
         sorted_leaderboard = sorted(leaderboard, key=lambda x: x.score, reverse=True)
         # If we want to rank it, for example to save it
