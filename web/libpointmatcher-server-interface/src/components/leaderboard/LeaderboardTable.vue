@@ -60,11 +60,14 @@
       };
     },
     computed: {
-      filteredLeaderboard() {
-        return this.leaderboard.filter((entry) => {
-          return entry.name.toLowerCase().includes(this.searchQuery.toLowerCase());
-        });
-      }
+        filteredLeaderboard() {
+            return this.leaderboard.filter(entry => {
+            // Convertit toutes les valeurs de l'objet en chaîne et les regroupe.
+            const entryValuesString = Object.values(entry).join(' ').toLowerCase();
+            // Vérifie si la chaîne de recherche est contenue dans les valeurs de l'objet.
+            return entryValuesString.includes(this.searchQuery.toLowerCase());
+            });
+        }
     }
   };
   </script>
