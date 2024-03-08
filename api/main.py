@@ -1,4 +1,4 @@
-import os
+from os import environ as env
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -9,9 +9,6 @@ from user.user_controller import UserController
 from leaderboard.leaderboard_controller import LeaderboardController
 from routers import example, auth, configs, leaderboard
 from routers.util import authorization
-
-
-env = os.environ
 
 mongo_database = mongo.get_database(env)
 
