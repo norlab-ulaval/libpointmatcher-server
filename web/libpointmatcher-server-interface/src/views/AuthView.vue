@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="background-gradient">
         <ToastNotification :show="showToast" :message="toastMessage" />
         <SignIn @login-event="login_" :loginError="loginErrorMessage" v-if="!showSignUp" @toggle-signup="toggleSignUp" />
         <SignUp @signup-event="register_" :signUpError="signUpErrorMessage" v-else @back-to-signin="toggleSignUp" />
@@ -76,7 +76,7 @@
   </script>
   
   <style>
-  body {
+  .background-gradient {
     background: linear-gradient(to top, white, rgb(60 60 60 / 43%));
     margin: 0;
     height: 100%;
