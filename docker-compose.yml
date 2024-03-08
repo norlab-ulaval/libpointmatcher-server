@@ -10,23 +10,44 @@ services:
     networks:
       - internal
     environment:
-      API_URI: "http://api:8080/"
+      VITE_API_URI: "http://api:8080"
 
-  api:
+  test-api:
     build:
       context: ./api
-    ports:
-      - "8080:80"
+      dockerfile: ./Dockerfile-test
     depends_on:
       mongo:
         condition: service_healthy
+      cache:
+        condition: service_started
     env_file:
       - .env
     networks:
       - internal
     environment:
       MONGO_URI: "mongo:27017"
-      REDIS_URI: "cache:6379"
+      REDIS_URI: "cache"
+
+  api:
+   build:
+     context: ./api
+   ports:
+     - "8080:80"
+   depends_on:
+     mongo:
+       condition: service_healthy
+     cache:
+       condition: service_started
+     test-api:
+       condition: service_completed_successfully
+   env_file:
+     - .env
+   networks:
+     - internal
+   environment:
+     MONGO_URI: "mongo:27017"
+     REDIS_URI: "cache"
 
   mongo:
     image: mongo

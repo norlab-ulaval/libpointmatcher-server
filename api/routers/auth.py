@@ -1,9 +1,13 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from fastapi.security import OAuth2PasswordRequestForm
+from typing import Annotated
 
-from interface.interface_models import Token, RegisteringUser, LoginUser
+from interface.interface_models import Token, RegisteringUser, User
 from user.user_controller import UserController
+from routers.util.authorization import get_authorized_user
 
 user_controller: UserController
+
 
 router = APIRouter()
 
@@ -16,5 +20,9 @@ async def register_user(user: RegisteringUser):
 
 
 @router.post("/login", response_model=Token)
-async def login_for_access_token(form_data: LoginUser):
+async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
     return await user_controller.authenticate(form_data.username, form_data.password)
+
+@router.post("/logout")
+async def logout_user(user: Annotated[User, Depends(get_authorized_user)]):
+    return await user_controller.logout(user)
