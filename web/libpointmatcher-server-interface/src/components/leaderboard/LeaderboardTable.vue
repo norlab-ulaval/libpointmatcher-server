@@ -1,7 +1,7 @@
 <template>
     <div class="container mx-auto px-4 py-8">
       <h1 class="text-3xl font-bold text-center mb-4">libpointmatcher Leaderboard</h1>
-      <p class="text-center mb-16">Discover the most effective configurations contributed by our community.</p>
+      <p class="text-center mb-8">Discover the most effective configurations contributed by our community.</p>
       
       <div class="mb-4 relative">
         <svg class="w-6 h-6 text-gray-800 dark:text-white absolute left-3 top-1/2 transform -translate-y-1/2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -16,8 +16,8 @@
       </div>
   
       <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table class="w-full text-sm text-left text-gray-500">
-          <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+        <table class="w-full text-left text-gray-500">
+          <thead class="text-sm text-gray-700 uppercase" style="background-color: #F1F1F1;">
             <tr>
               <th scope="col" class="px-6 py-3">Date</th>
               <th scope="col" class="px-6 py-3">Release version</th>
@@ -26,7 +26,7 @@
               <th scope="col" class="px-6 py-3">Type</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class="text-md">
             <tr v-for="(entry, index) in filteredLeaderboard" :key="index" class="bg-white border-b">
               <td class="px-6 py-4">{{ entry.date }}</td>
               <td class="px-6 py-4">{{ entry.version }}</td>
