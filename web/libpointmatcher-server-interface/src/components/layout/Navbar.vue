@@ -33,15 +33,27 @@
             </div>
 
             <div class="pr-8">
-                <a class="text-white border-b-3 border-transparent hover:border-white custom-text-size font-sans pb-2" href="#">Log out</a>
+                <a class="text-white border-b-3 border-transparent hover:border-white custom-text-size font-sans pb-2" @click="handleLogout">Log out</a>
             </div>
         </div>
     </nav>
 </template>
   
   <script>
+  import { logout } from '@/api';
+
   export default {
     name: 'Navbar',
+    methods: {
+        async handleLogout() {
+            const result = await logout();
+            if (result.success) {
+                this.$router.push('/');
+            } else {
+                console.error(result.error);
+            }
+        }
+    }
   };
   </script>
 
