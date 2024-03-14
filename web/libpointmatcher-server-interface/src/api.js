@@ -99,3 +99,7 @@ export const getLeaderboard = async (page, limit, type) => {
     return { success: false, error: "Network error or server is unreachable." };
   }
 };
+
+export const transferFile = async () => {
+
+}
