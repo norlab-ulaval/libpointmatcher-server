@@ -101,6 +101,7 @@ export const getLeaderboard = async (page, limit, type) => {
 };
 
 export const transferFile = async (encodedFile) => {
+  // TODO : Verify that the route and function is good
   try {
     const request = new Request(`${endpoint}/upload`, {
       method: "POST",
