@@ -100,6 +100,22 @@ export const getLeaderboard = async (page, limit, type) => {
   }
 };
 
-export const transferFile = async () => {
+export const transferFile = async (encodedFile) => {
+  try {
+    const request = new Request(`${endpoint}/upload`, {
+      method: "POST",
+      body: JSON.stringify({file: encodedFile})
+    });
 
+    const response = await fetch(request);
+    const jsonResponse = await response.json();
+
+    if (!response.ok) {
+      throw new Error(jsonResponse.detail || "Failed to register. Please try again.");
+    }
+
+    return { success: true };
+  } catch (error) {
+    return { sucess: false, error: "Network error or server is unreachable."};
+  }
 }
