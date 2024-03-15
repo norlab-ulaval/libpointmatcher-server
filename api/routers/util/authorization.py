@@ -1,6 +1,6 @@
 from fastapi import Depends
 
-from interface.interface_models import User
+from user.user import User
 from auth.auth import oauth2_scheme
 from user.user_controller import UserController
 
