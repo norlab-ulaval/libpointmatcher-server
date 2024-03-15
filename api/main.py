@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 import db.mongo as mongo
 from db.users_mongo import UsersMongo
+from db.leaderboard_mongo import LeaderboardMongo
 from user.user_controller import UserController
 from leaderboard.leaderboard_controller import LeaderboardController
 from routers import example, auth, configs, leaderboard
@@ -16,8 +17,9 @@ env = os.environ
 mongo_database = mongo.get_database(env)
 
 user_repo = UsersMongo(mongo_database)
+leaderboard_repo = LeaderboardMongo(mongo_database)
 user_controller = UserController(user_repo)
-leaderboard_controller = LeaderboardController()
+leaderboard_controller = LeaderboardController(leaderboard_repo)
 
 authorization.user_controller = user_controller
 example.user_controller = user_controller
