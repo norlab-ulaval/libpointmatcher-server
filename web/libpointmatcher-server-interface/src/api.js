@@ -100,7 +100,7 @@ export const getLeaderboard = async (page, limit, type) => {
   }
 };
 
-export const transferFile = async (encodedFile) => {
+export const transferFile = async (evaluation) => {
   const token = Cookies.get("token");
 
   try {
@@ -109,7 +109,7 @@ export const transferFile = async (encodedFile) => {
       headers: {
         "Authorization": `Bearer ${token}`,
       },
-      body: JSON.stringify({file: encodedFile})
+      body: JSON.stringify({file: evaluation})
     });
 
     const response = await fetch(request);
