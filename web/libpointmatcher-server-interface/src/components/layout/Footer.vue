@@ -1,7 +1,7 @@
 <template>
     <footer class="bg-white w-full px-10">
       <div class="border-t border-gray-200 w-full">
-        <div class="container mx-auto px-4 py-6 flex justify-center items-center">
+        <div class="container mx-auto px-4 py-2 flex justify-center items-center">
           <router-link to="/about" class="text-gray-500 hover:text-gray-400 text-lg mx-4">About</router-link>
           <span class="text-gray-500 mx-4">|</span>
           <a href="https://github.com/norlab-ulaval/libpointmatcher" target="_blank" class="flex items-center text-gray-500 hover:text-gray-400 text-lg mx-4">
