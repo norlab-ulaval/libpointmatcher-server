@@ -1,7 +1,7 @@
 <template>
     <div class="container mx-auto px-4 py-8">
       <h1 class="text-3xl font-bold text-center mb-4">libpointmatcher Leaderboard</h1>
-      <p class="text-center mb-10">Discover the most effective configurations contributed by our community.</p>
+      <p class="text-center mb-8">Discover the most effective configurations contributed by our community.</p>
       
       <div class="flex justify-between mb-4">
         <div class="relative">
@@ -36,11 +36,11 @@
           </thead>
           <tbody class="text-md">
             <tr v-for="(entry, index) in filteredLeaderboard" :key="index" class="bg-white border-b">
-              <td class="px-6 py-4">{{ entry.date }}</td>
-              <td class="px-6 py-4">{{ entry.version }}</td>
-              <td class="px-6 py-4">{{ entry.name }}</td>
-              <td class="px-6 py-4">{{ entry.score }}</td>
-              <td class="px-6 py-4">{{ entry.type }}</td>
+              <td class="px-6 py-3.5">{{ entry.date }}</td>
+              <td class="px-6 py-3.5">{{ entry.version }}</td>
+              <td class="px-6 py-3.5">{{ entry.name }}</td>
+              <td class="px-6 py-3.5">{{ entry.score }}</td>
+              <td class="px-6 py-3.5">{{ entry.type }}</td>
             </tr>
           </tbody>
         </table>
@@ -64,6 +64,7 @@
             { date: '2023-10-21', version: '1.3.8', name: 'Anonymous', score: 96.1, type: 'Average' },
             { date: '2023-10-06', version: '1.1.3', name: 'Alpha tech', score: 94, type: 'Average' },
             { date: '2023-04-02', version: '1.8.1', name: 'John doe', score: 92, type: 'Average' },
+            { date: '2023-03-14', version: '1.3.7', name: 'Delta research', score: 89, type: 'Average' },
             { date: '2023-03-14', version: '1.3.7', name: 'Delta research', score: 89, type: 'Average' }
         ]
       };
