@@ -191,6 +191,36 @@ async def test_register_then_try_login_with_wrong_password(client: AsyncClient):
         raise AssertionError
 
 
+@pytest.mark.anyio
+async def test_evaluation(client: AsyncClient):
+    user_data = {
+        'username': TEST_USER,
+        'email': 'test@example.com',
+        'password': 'DCL2D7zi6y8Q7a6Ib!'
+    }
+
+    await client.post('/register', json=user_data)
+
+    user_data = {
+        'username': 'test@example.com',
+        'password': 'DCL2D7zi6y8Q7a6Ib!'
+    }
+
+    login_response = await client.post('/login', data=user_data)
+
+    access_token = login_response.json()['access_token']
+
+    new_evaluation_response = await client.post('/evaluation', json={'config': 'config', 'anonymous': False}, headers={'Authorization': 'Bearer ' + access_token})
+
+    assert new_evaluation_response.status_code == 200
+
+    get_evaluations_response = await client.get('/evaluation', headers={'Authorization': 'Bearer ' + access_token})
+
+    assert get_evaluations_response.status_code == 200
+
+    assert len(get_evaluations_response.json())
+
+
 async def remove_test_user():
     env = os.environ
     db = get_database(env)

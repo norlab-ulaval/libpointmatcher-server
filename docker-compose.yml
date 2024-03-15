@@ -21,6 +21,8 @@ services:
         condition: service_healthy
       cache:
         condition: service_started
+      libpointmatcher:
+        condition: service_started
     env_file:
       - .env
     networks:
@@ -41,6 +43,8 @@ services:
        condition: service_started
      test-api:
        condition: service_completed_successfully
+     libpointmatcher:
+       condition: service_started
    env_file:
      - .env
    networks:
@@ -88,6 +92,14 @@ services:
     command: redis-server --save 20 1 --loglevel warning --requirepass potato123
     volumes:
       - cache:/data
+    networks:
+      - internal
+
+  libpointmatcher:
+    image: libpointmatcher
+    command: 'evaluate_config_server.py --ws 8765 --config a --point-cloud a --output a --seed 1'
+    ports:
+      - '8765:8765'
     networks:
       - internal
 
