@@ -2,6 +2,7 @@ from motor.core import AgnosticDatabase, AgnosticCollection
 
 from evaluation.evaluation import Evaluation
 from evaluation.evaluation_repo import EvaluationRepo
+from leaderboard.leaderboard_entry import LeaderboardEntry
 from leaderboard.leaderboard_repo import LeaderboardRepo
 
 
@@ -40,7 +41,11 @@ class EvaluationMongo(EvaluationRepo, LeaderboardRepo):
     async def save(self, evaluation: Evaluation):
         await self.collection.insert_one(_to_json(evaluation))
 
-    def fetch_leaderboard(self, type_filter: str):
+    async def find_all(self) -> list[LeaderboardEntry]:
+        # TODO
+        pass
+
+    async def find_by_type(self, type: str) -> list[LeaderboardEntry]:
         # TODO
         pass
 
