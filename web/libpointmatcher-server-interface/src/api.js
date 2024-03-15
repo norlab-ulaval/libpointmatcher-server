@@ -79,7 +79,7 @@ export const getLeaderboard = async (page, limit, type) => {
   
   try {
     const request = new Request(`${endpoint}/leaderboard`, {
-      method: "GET",
+      method: "POST",
       headers: {
         "content-type": "application/json",
         "Authorization": `Bearer ${token}`,
