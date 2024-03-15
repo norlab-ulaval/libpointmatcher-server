@@ -99,3 +99,28 @@ export const getLeaderboard = async (page, limit, type) => {
     return { success: false, error: "Network error or server is unreachable." };
   }
 };
+
+export const transferFile = async (configString, anonymousBool) => {
+  const token = Cookies.get("token");
+
+  try {
+    const request = new Request(`${endpoint}/evaluation`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
+      body: JSON.stringify({evaluation:{config: configString, anonymous: anonymousBool}})
+    });
+
+    const response = await fetch(request);
+    const jsonResponse = await response.json();
+
+    if (!response.ok) {
+      throw new Error(jsonResponse.detail || "Failed to evaluate. Please try again.");
+    }
+
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: "Network error or server is unreachable."};
+  }
+}
