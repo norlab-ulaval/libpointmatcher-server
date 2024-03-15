@@ -101,10 +101,14 @@ export const getLeaderboard = async (page, limit, type) => {
 };
 
 export const transferFile = async (encodedFile) => {
-  // TODO : Verify that the route and function is good
+  const token = Cookies.get("token");
+
   try {
     const request = new Request(`${endpoint}/upload`, {
       method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
       body: JSON.stringify({file: encodedFile})
     });
 
@@ -117,6 +121,6 @@ export const transferFile = async (encodedFile) => {
 
     return { success: true };
   } catch (error) {
-    return { sucess: false, error: "Network error or server is unreachable."};
+    return { success: false, error: "Network error or server is unreachable."};
   }
 }
