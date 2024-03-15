@@ -16,6 +16,11 @@ class NewEvaluation(BaseModel):
     anonymous: bool
 
 
+@router.get("/evaluation")
+async def get_evaluations(user: Annotated[User, Depends(get_authorized_user)]):
+    return await evaluation_controller.get_evaluations(user)
+
+
 @router.post("/evaluation")
 async def new_evaluation(evaluation: NewEvaluation, user: Annotated[User, Depends(get_authorized_user)]):
     return await evaluation_controller.evaluate_config(user, evaluation.config, evaluation.anonymous)
