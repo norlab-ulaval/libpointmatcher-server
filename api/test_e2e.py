@@ -240,14 +240,15 @@ async def test_evaluation(client: AsyncClient):
         login_response = await client.post('/login', data=user_data)
 
         access_token = login_response.json()['access_token']
-
+        before = await client.get('/leaderboard/size')
         await client.post('/evaluation', json={'config': 'config', 'anonymous': False},
                                                     headers={'Authorization': 'Bearer ' + access_token})
 
         response = await client.get('/leaderboard/size')
 
         assert response.status_code == 200
-        assert response.json() == 1
+        # I do this because since it's an e2e test we cant really test the actual number of entry.
+        assert response.json() > before.json()
 
 
 async def remove_test_user():
