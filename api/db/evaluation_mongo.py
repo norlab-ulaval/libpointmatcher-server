@@ -49,6 +49,9 @@ class EvaluationMongo(EvaluationRepo, LeaderboardRepo):
         # TODO
         pass
 
+    async def get_size(self) -> int:
+        return await self.collection.count_documents({})
+
 
 
 

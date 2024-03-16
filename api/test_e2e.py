@@ -220,7 +220,6 @@ async def test_evaluation(client: AsyncClient):
 
     assert len(get_evaluations_response.json())
 
-
 async def remove_test_user():
     env = os.environ
     db = get_database(env)
