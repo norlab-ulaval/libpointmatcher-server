@@ -78,13 +78,12 @@ export const getLeaderboard = async (page, limit, type) => {
   const token = Cookies.get("token");
   
   try {
-    const request = new Request(`${endpoint}/leaderboard`, {
+    const request = new Request(`${endpoint}/leaderboard?page=${page}&limit=${limit}&type=${type}`, {
       method: "GET",
       headers: {
         "content-type": "application/json",
         "Authorization": `Bearer ${token}`,
-      },
-      body: JSON.stringify({ page: page, limit: limit, type: type }),
+      }
     });
 
     const response = await fetch(request);

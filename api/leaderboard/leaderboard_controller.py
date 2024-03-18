@@ -23,7 +23,11 @@ class LeaderboardController:
         else:
             leaderboard = await self._find_all()
 
-        sorted_leaderboard = self.rank_leaderboard(leaderboard)
+        if leaderboard:
+            sorted_leaderboard = self.rank_leaderboard(leaderboard)
+        else:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                                detail="Error loading the leaderboard")
 
         start_index = (page - 1) * limit
         end_index = start_index + limit
