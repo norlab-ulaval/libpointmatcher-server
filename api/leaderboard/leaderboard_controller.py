@@ -32,11 +32,9 @@ class LeaderboardController:
         start_index = (page - 1) * limit
         end_index = start_index + limit
 
-        return sorted_leaderboard[start_index:end_index]
-
-    async def get_leaderboard_size(self) -> int:
-        return await self._get_leaderboard_size()
-
+        leaderboard = Leaderboard(sorted_leaderboard[start_index:end_index], self._get_leaderboard_size())
+        
+        return leaderboard
     def rank_leaderboard(self, leaderboard: list[LeaderboardEntry]) -> list[LeaderboardEntry]:
         sorted_leaderboard = sorted(leaderboard, key=lambda x: x.score, reverse=True)
         # If we want to rank it, for example to save it
