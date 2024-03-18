@@ -14,6 +14,9 @@ class LeaderboardController:
     async def _find_all(self):
         return await self.leaderboard_repo.find_all()
 
+    async def _get_leaderboard_size(self):
+        return await self.leaderboard_repo.get_size()
+
     async def get_leaderboard(self, page: int, limit: int, type: Optional[str] = None) -> list[LeaderboardEntry]:
         if type is not None and type != "all":
             leaderboard = await self._find_by_type(type)
