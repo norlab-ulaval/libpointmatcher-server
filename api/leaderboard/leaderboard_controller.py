@@ -31,8 +31,9 @@ class LeaderboardController:
 
         start_index = (page - 1) * limit
         end_index = start_index + limit
+        size = await self._get_leaderboard_size()
 
-        leaderboard = Leaderboard(sorted_leaderboard[start_index:end_index], self._get_leaderboard_size())
+        leaderboard = Leaderboard(sorted_leaderboard[start_index:end_index], size)
         return leaderboard
 
     def rank_leaderboard(self, leaderboard: list[LeaderboardEntry]) -> list[LeaderboardEntry]:

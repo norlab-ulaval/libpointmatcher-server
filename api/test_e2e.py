@@ -222,33 +222,32 @@ async def test_evaluation(client: AsyncClient):
 
     assert len(get_evaluations_response.json())
 
-    # @pytest.mark.anyio
-    # async def test_size_evaluation(client: AsyncClient):
-    #     user_data = {
-    #         'username': TEST_USER,
-    #         'email': TEST_EMAIL,
-    #         'password': 'DCL2D7zi6y8Q7a6Ib!'
-    #     }
-
-    #     await client.post('/register', json=user_data)
-
-    #     user_data = {
-    #         'username': TEST_EMAIL,
-    #         'password': 'DCL2D7zi6y8Q7a6Ib!'
-    #     }
-
-    #     login_response = await client.post('/login', data=user_data)
-
-    #     access_token = login_response.json()['access_token']
-    #     before = await client.get('/leaderboard/size')
-    #     await client.post('/evaluation', json={'config': 'config', 'anonymous': False},
-    #                                                 headers={'Authorization': 'Bearer ' + access_token})
-
-    #     response = await client.get('/leaderboard/size')
-
-    #     assert response.status_code == 200
-    #     # I do this because since it's an e2e test we cant really test the actual number of entry.
-    #     assert response.json() > before.json()
+# @pytest.mark.anyio
+# async def test_size_evaluation(client: AsyncClient):
+#     user_data = {
+#         'username': TEST_USER,
+#         'email': TEST_EMAIL,
+#         'password': 'DCL2D7zi6y8Q7a6Ib!'
+#     }
+#
+#     await client.post('/register', json=user_data)
+#
+#     user_data = {
+#         'username': TEST_EMAIL,
+#         'password': 'DCL2D7zi6y8Q7a6Ib!'
+#     }
+#
+#     login_response = await client.post('/login', data=user_data)
+#     access_token = login_response.json()['access_token']
+#
+#     test = await client.post('/evaluation', json={'config': 'config', 'anonymous': False},
+#                                                 headers={'Authorization': 'Bearer ' + access_token})
+#     response = await client.get('/leaderboard?page=1&limit=10&type=all')
+#
+#     #Not working since some function in the repo that the get uses is not working
+#     # assert response.status_code == 200
+#     # I do this because since it's an e2e test we cant really test the actual number of entry.
+#     # assert response.json() > before.json()
 
 
 async def remove_test_user():
