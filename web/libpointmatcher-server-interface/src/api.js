@@ -99,26 +99,6 @@ export const getLeaderboard = async (page, limit, type) => {
   }
 };
 
-export const getLeaderboardSize = async () => {
-
-  try {
-    const request = new Request(`${endpoint}/leaderboard/size`, {
-      method: "GET"
-    });
-
-    const response = await fetch(request);
-    const jsonResponse = await response.json();
-
-    if (!response.ok) {
-      throw new Error(jsonResponse.detail || "Failed to fetch leaderboard size.");
-    }
-
-    return { success: true, size: jsonResponse };
-  } catch (error) {
-    return { success: false, error: "Network error or server is unreachable." };
-  }
-};
-
 export const transferFile = async (configString, anonymousBool) => {
   const token = Cookies.get("token");
 

@@ -222,33 +222,33 @@ async def test_evaluation(client: AsyncClient):
 
     assert len(get_evaluations_response.json())
 
-    @pytest.mark.anyio
-    async def test_size_evaluation(client: AsyncClient):
-        user_data = {
-            'username': TEST_USER,
-            'email': TEST_EMAIL,
-            'password': 'DCL2D7zi6y8Q7a6Ib!'
-        }
+    # @pytest.mark.anyio
+    # async def test_size_evaluation(client: AsyncClient):
+    #     user_data = {
+    #         'username': TEST_USER,
+    #         'email': TEST_EMAIL,
+    #         'password': 'DCL2D7zi6y8Q7a6Ib!'
+    #     }
 
-        await client.post('/register', json=user_data)
+    #     await client.post('/register', json=user_data)
 
-        user_data = {
-            'username': TEST_EMAIL,
-            'password': 'DCL2D7zi6y8Q7a6Ib!'
-        }
+    #     user_data = {
+    #         'username': TEST_EMAIL,
+    #         'password': 'DCL2D7zi6y8Q7a6Ib!'
+    #     }
 
-        login_response = await client.post('/login', data=user_data)
+    #     login_response = await client.post('/login', data=user_data)
 
-        access_token = login_response.json()['access_token']
-        before = await client.get('/leaderboard/size')
-        await client.post('/evaluation', json={'config': 'config', 'anonymous': False},
-                                                    headers={'Authorization': 'Bearer ' + access_token})
+    #     access_token = login_response.json()['access_token']
+    #     before = await client.get('/leaderboard/size')
+    #     await client.post('/evaluation', json={'config': 'config', 'anonymous': False},
+    #                                                 headers={'Authorization': 'Bearer ' + access_token})
 
-        response = await client.get('/leaderboard/size')
+    #     response = await client.get('/leaderboard/size')
 
-        assert response.status_code == 200
-        # I do this because since it's an e2e test we cant really test the actual number of entry.
-        assert response.json() > before.json()
+    #     assert response.status_code == 200
+    #     # I do this because since it's an e2e test we cant really test the actual number of entry.
+    #     assert response.json() > before.json()
 
 
 async def remove_test_user():

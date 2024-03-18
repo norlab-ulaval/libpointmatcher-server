@@ -8,6 +8,3 @@ class LeaderboardRepo:
     async def find_by_type(self, type: str) -> list[LeaderboardEntry]:
         pass
 
-    async def get_size(self) -> int:
-        pass
-

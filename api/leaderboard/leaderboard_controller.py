@@ -14,9 +14,6 @@ class LeaderboardController:
     async def _find_all(self):
         return await self.leaderboard_repo.find_all()
 
-    async def _get_leaderboard_size(self) -> int:
-        return await self.leaderboard_repo.get_size()
-
     async def get_leaderboard(self, page: int, limit: int, type: Optional[str] = None) -> list[LeaderboardEntry]:
         if type is not None and type != "all":
             leaderboard = await self._find_by_type(type)
@@ -33,8 +30,8 @@ class LeaderboardController:
         end_index = start_index + limit
 
         leaderboard = Leaderboard(sorted_leaderboard[start_index:end_index], self._get_leaderboard_size())
-        
         return leaderboard
+
     def rank_leaderboard(self, leaderboard: list[LeaderboardEntry]) -> list[LeaderboardEntry]:
         sorted_leaderboard = sorted(leaderboard, key=lambda x: x.score, reverse=True)
         # If we want to rank it, for example to save it
