@@ -1,5 +1,9 @@
+import asyncio
+import os
+
 from motor.core import AgnosticDatabase, AgnosticCollection
 
+from db import mongo
 from evaluation.evaluation import Evaluation
 from evaluation.evaluation_repo import EvaluationRepo
 from leaderboard.leaderboard_entry import LeaderboardEntry
@@ -48,6 +52,9 @@ class EvaluationMongo(EvaluationRepo, LeaderboardRepo):
     async def find_by_type(self, type: str) -> list[LeaderboardEntry]:
         # TODO
         pass
+
+    async def get_all_types(self) -> list[str]:
+        return await self.collection.find({}, {'type': 1}).distinct('type')
 
     async def get_size(self) -> int:
         return await self.collection.count_documents({})

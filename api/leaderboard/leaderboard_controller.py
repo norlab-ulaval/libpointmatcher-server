@@ -42,3 +42,6 @@ class LeaderboardController:
         # for rank, entry in enumerate(sorted_leaderboard, start=1):
         #     entry.rank = rank
         return sorted_leaderboard
+
+    async def get_all_types(self) -> list[str]:
+        return await self.leaderboard_repo.get_all_types()

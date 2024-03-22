@@ -195,22 +195,7 @@ async def test_register_then_try_login_with_wrong_password(client: AsyncClient):
 
 @pytest.mark.anyio
 async def test_evaluation(client: AsyncClient):
-    user_data = {
-        'username': TEST_USER,
-        'email': TEST_EMAIL,
-        'password': 'DCL2D7zi6y8Q7a6Ib!'
-    }
-
-    await client.post('/register', json=user_data)
-
-    user_data = {
-        'username': TEST_EMAIL,
-        'password': 'DCL2D7zi6y8Q7a6Ib!'
-    }
-
-    login_response = await client.post('/login', data=user_data)
-
-    access_token = login_response.json()['access_token']
+    access_token = await register_login(client)
 
     new_evaluation_response = await client.post('/evaluation', json={'config': 'config', 'anonymous': False}, headers={'Authorization': 'Bearer ' + access_token})
 
@@ -248,6 +233,41 @@ async def test_evaluation(client: AsyncClient):
 #     # assert response.status_code == 200
 #     # I do this because since it's an e2e test we cant really test the actual number of entry.
 #     # assert response.json() > before.json()
+
+
+@pytest.mark.anyio
+async def test_get_types(client: AsyncClient):
+    access_token = await register_login(client)
+
+    await client.post('/evaluation', json={'config': 'config', 'anonymous': False}, headers={'Authorization': 'Bearer ' + access_token})
+
+    get_types_response = await client.get('/leaderboard/types', headers={'Authorization': 'Bearer ' + access_token})
+
+    assert get_types_response.status_code == 200
+
+    types = get_types_response.json()
+
+    assert len(types)
+    assert 'average' in types
+
+
+async def register_login(client: AsyncClient) -> str:
+    user_data = {
+        'username': TEST_USER,
+        'email': TEST_EMAIL,
+        'password': 'DCL2D7zi6y8Q7a6Ib!'
+    }
+
+    await client.post('/register', json=user_data)
+
+    user_data = {
+        'username': TEST_EMAIL,
+        'password': 'DCL2D7zi6y8Q7a6Ib!'
+    }
+
+    login_response = await client.post('/login', data=user_data)
+
+    return login_response.json()['access_token']
 
 
 async def remove_test_user():
