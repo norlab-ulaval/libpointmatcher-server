@@ -38,9 +38,9 @@
             <tr v-for="(entry, index) in filteredLeaderboard" :key="index" class="bg-white border-b">
               <td class="px-6 py-3.5">{{ entry.date }}</td>
               <td class="px-6 py-3.5">{{ entry.version }}</td>
-              <td class="px-6 py-3.5">{{ entry.name }}</td>
+              <td class="px-6 py-3.5">{{ entry.username }}</td>
               <td class="px-6 py-3.5">{{ entry.score }}</td>
-              <td class="px-6 py-3.5">{{ entry.type }}</td>
+              <td class="px-6 py-3.5">{{ entry.score_type }}</td>
             </tr>
           </tbody>
         </table>
@@ -66,13 +66,13 @@
             of
           </span>
           <span class="min-h-[38px] flex justify-center items-center text-gray-500 py-2 px-1.5 text-sm dark:text-gray-500">
-            {{ totalPages }}
+            {{ total }}
           </span>
         </div>
         <button 
           type="button"
           @click="changePage(currentPage + 1)"
-          :disabled="currentPage === totalPages"
+          :disabled="currentPage === total"
           class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10"
         >
           <span aria-hidden="true" class="sr-only">Next</span>
@@ -93,7 +93,7 @@
         selectedType: 'Average',
         leaderboardEntries: [],
         currentPage: 1,
-        totalPages: 0,
+        total: 0,
         limit: 10,
         inputPage: 1,
       };
@@ -106,14 +106,14 @@
         const response = await getLeaderboard(this.currentPage, this.limit, this.selectedType);
         if (response.success) {
           this.leaderboardEntries = response.leaderboard.entries;
-          this.totalPages = Math.ceil(response.leaderboard.total / this.limit);
+          this.total = Math.ceil(response.leaderboard.total / this.limit);
         } else {
           console.error(response.error);
         }
       },
       validateAndChangePage() {
         const page = parseInt(this.inputPage, 10);
-        if (!isNaN(page) && page >= 1 && page <= this.totalPages) {
+        if (!isNaN(page) && page >= 1 && page <= this.total) {
           this.currentPage = page;
           this.fetchData();
         } else {
