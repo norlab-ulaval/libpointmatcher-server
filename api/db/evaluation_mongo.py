@@ -42,12 +42,43 @@ class EvaluationMongo(EvaluationRepo, LeaderboardRepo):
         await self.collection.insert_one(_to_json(evaluation))
 
     async def find_all(self) -> list[LeaderboardEntry]:
-        # TODO
-        pass
+        entries = []
+
+        cursor = self.collection.aggregate([
+            {'$sort': {'result': 1}},
+            {'$group': {
+                '_id': {'user_email': '$user_email', 'type': '$type'},
+                'result': {'$first': '$result'},
+                'date': {'$first': '$date'},
+                'anonymous': {'$first': '$anonymous'}
+            }}
+        ])
+
+        for doc in await cursor.to_list(length=None):
+            email = '' if doc['anonymous'] else doc['_id']['user_email']
+            entries.append(LeaderboardEntry(email, doc['result'], doc['_id']['type'], 'demo', doc['date']))
+
+        return entries
 
     async def find_by_type(self, type: str) -> list[LeaderboardEntry]:
-        # TODO
-        pass
+        entries = []
+
+        cursor = self.collection.aggregate([
+            {'$match': {'type': type}},
+            {'$sort': {'result': 1}},
+            {'$group': {
+                '_id': '$user_email',
+                'result': {'$first': '$result'},
+                'date': {'$first': '$date'},
+                'anonymous': {'$first': '$anonymous'}
+            }}
+        ])
+
+        for doc in await cursor.to_list(length=None):
+            email = '' if doc['anonymous'] else doc['_id']
+            entries.append(LeaderboardEntry(email, doc['result'], type, 'demo', doc['date']))
+
+        return entries
 
     async def get_size(self) -> int:
         return await self.collection.count_documents({})
