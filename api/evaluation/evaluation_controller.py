@@ -1,5 +1,6 @@
 import uuid
 from datetime import datetime
+import base64
 
 from evaluation.evaluation import Evaluation
 from evaluation.evaluation_repo import EvaluationRepo
@@ -13,6 +14,8 @@ class EvaluationController:
         self.evaluation_repo = evaluation_repo
 
     async def evaluate_config(self, user: User, config: str, anonymous: bool):
+        # To decode the file use something like :
+        # base64.b64decode(config).decode('utf-8')
         run_id = str(uuid.uuid4())
         date = datetime.utcnow()
 
