@@ -105,8 +105,9 @@ export const transferFile = async (configBase64, anonymousBool) => {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${token}`,
+        "content-type": "application/json"
       },
-      body: JSON.stringify({evaluation:{config: configBase64, anonymous: anonymousBool}})
+      body: JSON.stringify({ 'config': configBase64, 'anonymous': anonymousBool })
     });
 
     const response = await fetch(request);
