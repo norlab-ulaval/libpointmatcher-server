@@ -97,7 +97,7 @@ export const getLeaderboard = async (page, limit, type) => {
   }
 };
 
-export const transferFile = async (configString, anonymousBool) => {
+export const transferFile = async (configBase64, anonymousBool) => {
   const token = Cookies.get("token");
 
   try {
@@ -106,7 +106,7 @@ export const transferFile = async (configString, anonymousBool) => {
       headers: {
         "Authorization": `Bearer ${token}`,
       },
-      body: JSON.stringify({evaluation:{config: configString, anonymous: anonymousBool}})
+      body: JSON.stringify({evaluation:{config: configBase64, anonymous: anonymousBool}})
     });
 
     const response = await fetch(request);
