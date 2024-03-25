@@ -80,14 +80,12 @@ export const getLeaderboard = async (page, limit, type) => {
   try {
     const request = new Request(`${endpoint}/leaderboard?page=${page}&limit=${limit}&type=${type}`, {
       method: "GET",
-      headers: {
-        "content-type": "application/json",
-        "Authorization": `Bearer ${token}`,
-      }
     });
 
     const response = await fetch(request);
     const jsonResponse = await response.json();
+    console.log("response")
+    console.log(jsonResponse)
 
     if (!response.ok) {
       throw new Error(jsonResponse.detail || "Failed to fetch leaderboard.");

@@ -28,7 +28,7 @@ class LeaderboardQuery(BaseModel):
     
 class LeaderboardEntry(BaseModel):
     username: str
-    score: int
+    score: float
     score_type: str
     version: str
     date: str

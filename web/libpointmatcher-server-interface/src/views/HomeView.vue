@@ -1,8 +1,13 @@
-
 <template>
-  <div class="flex items-center justify-center">
-    <div>
-      <h1> Welcome page </h1>
-    </div>
-  </div>
+  <LeaderboardTable />
 </template>
+
+<script>
+import LeaderboardTable from '../components/leaderboard/LeaderboardTable.vue';
+
+export default {
+  components: {
+        LeaderboardTable
+    },
+}
+</script>
