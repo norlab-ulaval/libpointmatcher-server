@@ -46,3 +46,6 @@ class LeaderboardController:
         #     entry.rank = rank
 
         return sorted_leaderboard
+
+    async def get_all_types(self) -> list[str]:
+        return await self.leaderboard_repo.get_all_types()
