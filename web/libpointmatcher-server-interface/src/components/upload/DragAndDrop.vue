@@ -1,7 +1,7 @@
 <template>
-  <h1 class="text-3xl font-bold text-center mb-4 mt-4">Configuration Upload</h1>
+  <h1 class="text-3xl font-bold text-center mb-4 mt-8">Configuration Upload</h1>
 
-  <div class="w-full px-96 pt-6">
+  <div class="w-full px-96 pt-4">
     <label
       for="dropzone-file"
       :class="[
