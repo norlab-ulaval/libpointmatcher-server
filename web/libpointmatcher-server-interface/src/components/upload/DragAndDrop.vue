@@ -1,5 +1,7 @@
 <template>
-  <div class="flex flex-col items-center justify-center w-full px-72 pt-12">
+  <h1 class="text-3xl font-bold text-center mb-4 mt-4">Configuration Upload</h1>
+
+  <div class="w-full px-96 pt-6">
     <label
       for="dropzone-file"
       :class="[
@@ -27,15 +29,15 @@
         accept=".yml, .yaml"
       />
     </label>
-    <div class="px-4 py-2 min-h-24">
-      <div class="text-lg font-semibold mb-2">Uploads:</div>
+    <div class="px-4 py-2 min-h-40">
+      <div class="text-lg font-semibold mb-2">Files:</div>
       <ul>
         <li v-for="(file, index) in uploadedFiles" :key="index" class="flex items-center p-2 bg-gray-100 rounded-lg mb-2 shadow">
           <svg class="w-6 h-6 text-gray-800 dark:text-white mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 3v4a1 1 0 0 1-1 1H5m4 8h6m-6-4h6m4-8v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1Z"/>
           </svg>
           <div class="flex-grow">
-            <div class="font-medium">{{ file.name }}</div>
+            <div class="font-medium text-base/7">{{ file.name }}</div>
             <div class="text-sm text-gray-600">{{ (file.size / 1024).toFixed(2) }} KB</div>
           </div>
           <button @click="removeFile(index)" class="ml-2">
@@ -45,6 +47,21 @@
           </button>
         </li>
       </ul>
+    </div>
+    <div class="flex justify-between items-center mt-4 px-4">
+      <div class="flex items-center">
+        <input 
+        id="anonymous" 
+        type="checkbox" 
+        class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+        :disabled="uploadedFiles.length === 0"
+        >
+        <label for="anonymous" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Anonymous</label>
+      </div>
+      <button 
+      class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900 focus:ring ring-blue-300 disabled:opacity-25 transition ease-in-out duration-150"
+      :disabled="uploadedFiles.length === 0"
+      >Run</button>
     </div>
   </div>
 </template>
