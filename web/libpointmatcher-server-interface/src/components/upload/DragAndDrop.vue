@@ -67,6 +67,7 @@
 </template>
 
 <script>
+import { transferFile } from '@/api';
 export default {
   data() {
     return {
@@ -91,7 +92,23 @@ export default {
       const yamlFiles = fileList.filter(file => file.name.endsWith('.yml') || file.name.endsWith('.yaml'));
       this.uploadedFiles.push(...yamlFiles);
 
-      // TODO: ajouter la logique pour uploader les fichiers
+      yamlFiles.forEach(async file => {
+        await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+
+          reader.onload = () => {
+            const base64Data = btoa(reader.result);
+            resolve(base64Data);
+          };
+
+          reader.onerror = error => reject(error);
+          reader.readAsBinaryString(file);
+        }).then(base64Data => {
+          transferFile(base64Data, document.getElementById('anonymous').checked);
+        }).catch(error => {
+          console.error('Error reading file:', error);
+        });
+      });
     },
     removeFile(index) {
       this.uploadedFiles.splice(index, 1);
