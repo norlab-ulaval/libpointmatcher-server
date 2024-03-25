@@ -13,7 +13,7 @@ const router = createRouter({
       component: AuthView,
     },
     {
-      path: '/hom',
+      path: '/home',
       name: 'home',
       component: HomeView,
     },
