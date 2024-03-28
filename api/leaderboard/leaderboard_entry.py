@@ -1,13 +1,9 @@
-class LeaderboardEntry:
-    username = ""
-    score = ""
-    score_type = ""
-    version = ""
-    date = ""
+from pydantic import BaseModel
+from datetime import datetime
 
-    def __init__(self, username=None, score=None, score_type=None, version=None, date=None):
-        self.username = username
-        self.score = score
-        self.score_type = score_type
-        self.version = version
-        self.date = date
+class LeaderboardEntry(BaseModel):
+    username: str
+    score: float
+    score_type: str
+    version: str
+    date: datetime
