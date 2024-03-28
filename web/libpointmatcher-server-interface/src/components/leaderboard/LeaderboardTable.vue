@@ -16,9 +16,9 @@
             />
         </div>
         <select class="border-2 border-gray-300 bg-white h-10 rounded-lg text-gray-700 w-44 text-center" v-model="selectedType">
-            <option value="Average" selected>Average</option>
-            <option value="Easy">Easy</option>
-            <option value="Hard">Hard</option>
+            <option value="average" selected>average</option>
+            <option value="easy">easy</option>
+            <option value="hard">hard</option>
         </select>
       </div>
       
@@ -90,7 +90,7 @@
     data() {
       return {
         searchQuery: '',
-        selectedType: 'Average',
+        selectedType: 'average',
         leaderboardEntries: [],
         currentPage: 1,
         total: 0,
