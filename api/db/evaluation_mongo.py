@@ -80,7 +80,7 @@ class EvaluationMongo(EvaluationRepo, LeaderboardRepo):
 
         for doc in await cursor.to_list(length=None):
             email = '' if doc['anonymous'] else doc['_id']
-            entries.append(LeaderboardEntry(username=email, score=doc['result'], score_type=type, version='demo', date=doc['date']))
+            entries.append(LeaderboardEntry(email, doc['result'], type, 'demo', doc['date']))
 
         return entries
       
