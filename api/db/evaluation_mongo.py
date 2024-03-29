@@ -80,12 +80,9 @@ class EvaluationMongo(EvaluationRepo, LeaderboardRepo):
 
         for doc in await cursor.to_list(length=None):
             email = '' if doc['anonymous'] else doc['_id']
-            entries.append(LeaderboardEntry(email, doc['result'], type, 'demo', doc['date']))
+            entries.append(LeaderboardEntry(username=email, score=doc['result'], score_type=type, version='demo', date=doc['date']))
 
         return entries
       
     async def get_all_types(self) -> list[str]:
         return await self.collection.find({}, {'type': 1}).distinct('type')
-
-    async def get_size(self) -> int:
-        return await self.collection.count_documents({})
