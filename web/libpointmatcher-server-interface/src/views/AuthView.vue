@@ -13,7 +13,6 @@
   import { register, login, logout } from '../api';
   
   export default {
-    name: "app",
     components: {
         ToastNotification,
         SignIn,
