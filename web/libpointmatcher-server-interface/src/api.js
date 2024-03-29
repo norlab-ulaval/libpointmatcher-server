@@ -97,6 +97,28 @@ export const getLeaderboard = async (page, limit, type) => {
   }
 };
 
+export const getScoreTypes = async () => {
+  
+  try {
+    const request = new Request(`${endpoint}/leaderboard/types`, {
+      method: "GET",
+    });
+
+    const response = await fetch(request);
+    const scoreTypes = await response.json();
+
+    console.log(scoreTypes)
+    if (!response.ok) {
+      throw new Error(scoreTypes.detail || "Failed to fetch score types.");
+    }
+    
+    return { success: true, types: scoreTypes };
+  } catch (error) {
+    return { success: false, error: "Network error or server is unreachable." };
+  }
+};
+
+
 export const transferFile = async (configBase64, anonymousBool) => {
   const token = Cookies.get("token");
 

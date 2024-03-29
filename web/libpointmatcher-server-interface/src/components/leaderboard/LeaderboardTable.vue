@@ -16,31 +16,33 @@
             />
         </div>
         <select class="border-2 border-gray-300 bg-white h-10 rounded-lg text-gray-700 w-44 text-center" v-model="selectedType">
-            <option value="Average" selected>Average</option>
-            <option value="Easy">Easy</option>
-            <option value="Hard">Hard</option>
+          <option value="" disabled>Score type</option>         
+          <option value="all">All</option>
+          <option v-for="type in scoreTypes" :key="type" :value="type.toLowerCase()">
+            {{ capitalizeFirstLetter(type) }}
+          </option>
         </select>
       </div>
       
   
-      <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table class="w-full text-left text-gray-500 min-height-leaderboard">
+      <div class="relative overflow-x-auto" style="min-height: 59vh;">
+        <table class="table-fixed w-full text-center text-gray-500 shadow-md sm:rounded-lg">
           <thead class="text-sm text-gray-700 uppercase" style="background-color: #F1F1F1;">
             <tr>
-              <th scope="col" class="px-6 py-3">Date</th>
-              <th scope="col" class="px-6 py-3">Release version</th>
-              <th scope="col" class="px-6 py-3">Name</th>
-              <th scope="col" class="px-6 py-3">Score</th>
-              <th scope="col" class="px-6 py-3">Type</th>
+              <th scope="col" class="w-1/6 px-6 py-3">Date</th>
+              <th scope="col" class="w-1/6 px-6 py-3">Release version</th>
+              <th scope="col" class="w-1/4 px-6 py-3">Username</th>
+              <th scope="col" class="w-1/6 px-6 py-3">Score</th>
+              <th scope="col" class="w-1/6 px-6 py-3">Type</th>
             </tr>
           </thead>
           <tbody class="text-md">
-            <tr v-for="(entry, index) in filteredLeaderboard" :key="index" class="bg-white border-b">
-              <td class="px-6 py-3.5">{{ entry.date }}</td>
+            <tr v-for="(entry, index) in filteredLeaderboard" :key="index" class="leaderboard-row bg-white border-b">
+              <td class="px-6 py-3.5">{{ formatDate(entry.date) }}</td>
               <td class="px-6 py-3.5">{{ entry.version }}</td>
               <td class="px-6 py-3.5">{{ entry.username }}</td>
-              <td class="px-6 py-3.5">{{ entry.score }}</td>
-              <td class="px-6 py-3.5">{{ entry.score_type }}</td>
+              <td class="px-6 py-3.5">{{ formatScore(entry.score) }}</td>
+              <td class="px-6 py-3.5">{{ capitalizeFirstLetter(entry.score_type) }}</td>
             </tr>
           </tbody>
         </table>
@@ -54,7 +56,7 @@
           <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
           <span aria-hidden="true" class="sr-only">Previous</span>
         </button>
-        <div class="flex items-center gap-x-1 pt-2">
+        <div class="flex items-center gap-x-1">
           <input
             type="text"
             class="min-h-[38px] w-12 flex justify-center items-center border border-gray-200 text-gray-800 py-2 px-3 text-sm rounded-lg focus:outline-none"
@@ -83,23 +85,27 @@
   </template>
   
   <script>
-  import { getLeaderboard } from '@/api';
+  import { getLeaderboard, getScoreTypes } from '@/api';
 
   export default {
     name: 'LeaderboardTable',
     data() {
       return {
         searchQuery: '',
-        selectedType: 'Average',
+        selectedType: 'all',
+        scoreTypes: [],
         leaderboardEntries: [],
         currentPage: 1,
-        total: 0,
+        total: 1,
         limit: 10,
         inputPage: 1,
+        showDropdown: false,
+        placeholder: 'Score type',
       };
     },
     async created() {
       await this.fetchData();
+      await this.fetchScoreTypes();
     },
     methods: {
       async fetchData() {
@@ -119,6 +125,23 @@
         } else {
           this.inputPage = this.currentPage;
         }
+      },
+      formatDate(dateString) {
+        return dateString.split('T')[0];
+      },
+      async fetchScoreTypes() {
+        const response = await getScoreTypes();
+        if (response.success) {
+          this.scoreTypes = response.types;
+        } else {
+          console.error(response.error);
+        }
+      },
+      capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+      },
+      formatScore(score) {
+        return (score * 100).toFixed(2);
       },
     },
     watch: {
@@ -144,6 +167,27 @@
   }
   .custom-min-width {
     min-width: 10px;
+  }
+
+  .leaderboard-row {
+    min-height: 5rem;
+  }
+
+  tbody::after {
+    content: '';
+    display: block;
+    line-height: 5rem;
+  }
+
+  @media (min-width: 640px) {
+    .leaderboard-row {
+      min-height: 5rem;
+    }
+
+    tbody::after {
+      line-height: 5rem;
+    }
+
   }
 </style>
   
