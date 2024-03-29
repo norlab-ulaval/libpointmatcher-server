@@ -36,7 +36,7 @@
           </thead>
           <tbody class="text-md">
             <tr v-for="(entry, index) in filteredLeaderboard" :key="index" class="leaderboard-row bg-white border-b">
-              <td class="px-6 py-3.5">{{ entry.date }}</td>
+              <td class="px-6 py-3.5">{{ formatDate(entry.date) }}</td>
               <td class="px-6 py-3.5">{{ entry.version }}</td>
               <td class="px-6 py-3.5">{{ entry.username }}</td>
               <td class="px-6 py-3.5">{{ entry.score }}</td>
@@ -119,6 +119,9 @@
         } else {
           this.inputPage = this.currentPage;
         }
+      },
+      formatDate(dateString) {
+        return dateString.split('T')[0];
       },
     },
     watch: {
