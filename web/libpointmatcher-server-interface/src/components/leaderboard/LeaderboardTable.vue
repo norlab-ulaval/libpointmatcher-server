@@ -23,8 +23,8 @@
       </div>
       
   
-      <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table class="w-full text-left text-gray-500 min-height-leaderboard">
+      <div class="relative overflow-x-auto" style="min-height: 59vh;">
+        <table class="w-full text-left text-gray-500 shadow-md sm:rounded-lg">
           <thead class="text-sm text-gray-700 uppercase" style="background-color: #F1F1F1;">
             <tr>
               <th scope="col" class="px-6 py-3">Date</th>
@@ -35,7 +35,7 @@
             </tr>
           </thead>
           <tbody class="text-md">
-            <tr v-for="(entry, index) in filteredLeaderboard" :key="index" class="bg-white border-b">
+            <tr v-for="(entry, index) in filteredLeaderboard" :key="index" class="leaderboard-row bg-white border-b">
               <td class="px-6 py-3.5">{{ entry.date }}</td>
               <td class="px-6 py-3.5">{{ entry.version }}</td>
               <td class="px-6 py-3.5">{{ entry.username }}</td>
@@ -54,7 +54,7 @@
           <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
           <span aria-hidden="true" class="sr-only">Previous</span>
         </button>
-        <div class="flex items-center gap-x-1 pt-2">
+        <div class="flex items-center gap-x-1">
           <input
             type="text"
             class="min-h-[38px] w-12 flex justify-center items-center border border-gray-200 text-gray-800 py-2 px-3 text-sm rounded-lg focus:outline-none"
@@ -144,6 +144,27 @@
   }
   .custom-min-width {
     min-width: 10px;
+  }
+
+  .leaderboard-row {
+    min-height: 5rem;
+  }
+
+  tbody::after {
+    content: '';
+    display: block;
+    line-height: 5rem;
+  }
+
+  @media (min-width: 640px) {
+    .leaderboard-row {
+      min-height: 5rem;
+    }
+
+    tbody::after {
+      line-height: 5rem;
+    }
+
   }
 </style>
   
