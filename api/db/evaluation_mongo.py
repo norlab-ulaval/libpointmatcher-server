@@ -86,6 +86,3 @@ class EvaluationMongo(EvaluationRepo, LeaderboardRepo):
       
     async def get_all_types(self) -> list[str]:
         return await self.collection.find({}, {'type': 1}).distinct('type')
-
-    async def get_size(self) -> int:
-        return await self.collection.count_documents({})

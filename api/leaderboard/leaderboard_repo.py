@@ -10,6 +10,3 @@ class LeaderboardRepo:
 
     async def get_all_types(self) -> list[str]:
         pass
-
-    async def get_size(self) -> int:
-        pass

@@ -1,7 +1,7 @@
 from interface.interface_models import Leaderboard
 from leaderboard.leaderboard_entry import LeaderboardEntry
 from leaderboard.leaderboard_repo import LeaderboardRepo
-from typing import Optional
+from typing import Optional, List
 from fastapi import HTTPException, status
 
 
@@ -15,8 +15,8 @@ class LeaderboardController:
     async def _find_all(self):
         return await self.leaderboard_repo.find_all()
 
-    async def _get_leaderboard_size(self):
-        return await self.leaderboard_repo.get_size()
+    async def _get_leaderboard_size(self, leaderboard: List[LeaderboardEntry]) -> int:
+        return len(leaderboard)
 
     async def get_leaderboard(self, page: int, limit: int, type: Optional[str] = None) -> Leaderboard:
         if type is not None and type != "all":
@@ -32,13 +32,13 @@ class LeaderboardController:
 
         start_index = (page - 1) * limit
         end_index = start_index + limit
-        size = await self._get_leaderboard_size()
+        size = await self._get_leaderboard_size(sorted_leaderboard)
 
         leaderboard_response = Leaderboard(entries=sorted_leaderboard[start_index:end_index], total=size)
 
         return leaderboard_response
 
-    def rank_leaderboard(self, leaderboard: list[LeaderboardEntry]) -> list[LeaderboardEntry]:
+    def rank_leaderboard(self, leaderboard: List[LeaderboardEntry]) -> List[LeaderboardEntry]:
         sorted_leaderboard = sorted(leaderboard, key=lambda x: x.score, reverse=True)
 
         # If we want to rank it, for example to save it
