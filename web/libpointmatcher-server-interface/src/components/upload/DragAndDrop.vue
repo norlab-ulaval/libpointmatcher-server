@@ -62,6 +62,7 @@
       <button 
       class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900 focus:ring ring-blue-300 disabled:opacity-25 transition ease-in-out duration-150"
       :disabled="uploadedFiles.length === 0"
+      @click="runConfigurations"
       >Run</button>
     </div>
   </div>
@@ -97,6 +98,7 @@ export default {
       event.target.value = null;
     },
     processFiles(files) {
+      console.log(this.uploadedFiles)
       const fileList = Array.from(files);
       const yamlFiles = fileList.filter(file => file.name.endsWith('.yml') || file.name.endsWith('.yaml'));   
 
@@ -106,27 +108,41 @@ export default {
           this.displayToast(`A file named "${file.name}" has already been uploaded.`);
         } else {
           this.uploadedFiles.push(file);
+          console.log(this.uploadedFiles)
         }
 
-        await new Promise((resolve, reject) => {
-          const reader = new FileReader();
-
-          reader.onload = () => {
-            const base64Data = btoa(reader.result);
-            resolve(base64Data);
-          };
-
-          reader.onerror = error => reject(error);
-          reader.readAsBinaryString(file);
-        }).then(base64Data => {
-          transferFile(base64Data, document.getElementById('anonymous').checked);
-        }).catch(error => {
-          console.error('Error reading file:', error);
-        });
       });
     },
     removeFile(index) {
       this.uploadedFiles.splice(index, 1);
+    },
+    async runConfigurations() {
+      console.log('run')
+      for (const file of this.uploadedFiles) {
+        await this.convertAndTransferFile(file);
+      }
+      this.$router.push({ name: 'home'});
+    },
+
+    async convertAndTransferFile(file) {
+      try {
+        const base64Data = await this.readFileAsBase64(file);
+        transferFile(base64Data, document.getElementById('anonymous').checked);
+        console.log(document.getElementById('anonymous').checked)
+        
+      } catch (error) {
+        console.error('Error reading file:', error);
+      }
+    },
+
+    readFileAsBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(btoa(reader.result));
+        reader.onerror = error => reject(error);
+        reader.readAsBinaryString(file);
+        console.log('readFile')
+      });
     },
     displayToast(message) {
       this.warningMessage = message;
