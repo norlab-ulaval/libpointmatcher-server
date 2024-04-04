@@ -1,4 +1,5 @@
 <template>
+  <WarningToast :show="showWarningToast" :message="warningMessage" />
   <h1 class="text-3xl font-bold text-center mb-4 mt-8">Configuration Upload</h1>
 
   <div class="w-full px-96 pt-4">
@@ -67,12 +68,18 @@
 </template>
 
 <script>
+import WarningToast from '@/components/ui/WarningToast.vue';
 import { transferFile } from '@/api';
 export default {
+  components: {
+      WarningToast,
+  },
   data() {
     return {
       uploadedFiles: [ ],
       isDragOver: false,
+      showWarningToast: false,
+      warningMessage: '',
     };
   },
   methods: {
@@ -86,14 +93,21 @@ export default {
     },
     handleFiles(event) {
       this.processFiles(event.target.files);
+
+      event.target.value = null;
     },
     processFiles(files) {
-    console.log(this.uploadedFiles)
       const fileList = Array.from(files);
-      const yamlFiles = fileList.filter(file => file.name.endsWith('.yml') || file.name.endsWith('.yaml'));
-      this.uploadedFiles.push(...yamlFiles);
+      const yamlFiles = fileList.filter(file => file.name.endsWith('.yml') || file.name.endsWith('.yaml'));   
 
       yamlFiles.forEach(async file => {
+        const fileExists = this.uploadedFiles.some(existingFile => existingFile.name === file.name);
+        if (fileExists) {
+          this.displayToast(`A file named "${file.name}" has already been uploaded.`);
+        } else {
+          this.uploadedFiles.push(file);
+        }
+
         await new Promise((resolve, reject) => {
           const reader = new FileReader();
 
@@ -113,9 +127,23 @@ export default {
     },
     removeFile(index) {
       this.uploadedFiles.splice(index, 1);
-    }
+    },
+    displayToast(message) {
+      this.warningMessage = message;
+      this.showWarningToast = true;
+      setTimeout(() => {
+      this.showWarningToast = false;
+      }, 3000);
+    },
   }
 };
 </script>
 
-  
+<style>
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity 0.5s;
+  }
+  .fade-enter-from, .fade-leave-to {
+    opacity: 0;
+  }
+  </style>  

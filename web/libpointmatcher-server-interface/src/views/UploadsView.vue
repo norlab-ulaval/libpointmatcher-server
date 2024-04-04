@@ -7,7 +7,7 @@
 
     export default {
     components: {
-        DragAndDrop
+        DragAndDrop,
         },
     }
 </script>
