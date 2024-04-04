@@ -29,7 +29,7 @@
         accept=".yml, .yaml"
       />
     </label>
-    <div class="px-4 py-2 min-h-40">
+    <div class="px-4 py-2 min-h-24 pt-4">
       <div class="text-lg font-semibold mb-2">Files:</div>
       <ul>
         <li v-for="(file, index) in uploadedFiles" :key="index" class="flex items-center p-2 bg-gray-100 rounded-lg mb-2 shadow">
@@ -48,7 +48,7 @@
         </li>
       </ul>
     </div>
-    <div class="flex justify-between items-center mt-4 px-4">
+    <div class="flex justify-between items-center my-4 px-4">
       <div class="flex items-center">
         <input 
         id="anonymous" 
@@ -88,6 +88,7 @@ export default {
       this.processFiles(event.target.files);
     },
     processFiles(files) {
+    console.log(this.uploadedFiles)
       const fileList = Array.from(files);
       const yamlFiles = fileList.filter(file => file.name.endsWith('.yml') || file.name.endsWith('.yaml'));
       this.uploadedFiles.push(...yamlFiles);
