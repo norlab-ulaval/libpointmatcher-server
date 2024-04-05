@@ -18,7 +18,9 @@
     "js-cookie": "^3.0.5",
     "pinia": "^2.1.7",
     "serve": "^14.2.1",
+    "three": "^0.162.0",
     "vue": "^3.3.11",
+    "vue-papa-parse": "^3.1.0",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
