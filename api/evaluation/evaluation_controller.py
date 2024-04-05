@@ -13,7 +13,7 @@ class EvaluationController:
         self.evaluator = evaluator
         self.evaluation_repo = evaluation_repo
 
-    async def evaluate_config(self, user: User, config: str, anonymous: bool):
+    async def evaluate_config(self, user: User, config: str, anonymous: bool, name: str = ""):
         # To decode the file use something like :
         # base64.b64decode(config).decode('utf-8')
         run_id = str(uuid.uuid4())
@@ -24,9 +24,20 @@ class EvaluationController:
         for result_type in results.keys():
             result = results.get(result_type)
 
-            evaluation = Evaluation(run_id, user.email, result_type, result, date, anonymous)
+            evaluation = Evaluation(run_id, user.email, result_type, result, date, anonymous, name)
 
             await self.evaluation_repo.save(evaluation)
 
     async def get_evaluations(self, user: User):
         return await self.evaluation_repo.fetch_history_from_email(user.email)
+
+    async def get_evaluations_grouped_by_run_id(self, user: User) -> dict[str, list[Evaluation]]:
+        evaluations = await self.evaluation_repo.fetch_history_from_email(user.email)
+
+        groups: dict[str, list[Evaluation]] = {}
+        for evaluation in evaluations:
+            if evaluation.run_id not in groups.keys():
+                groups[evaluation.run_id] = []
+            groups[evaluation.run_id].append(evaluation)
+
+        return groups
