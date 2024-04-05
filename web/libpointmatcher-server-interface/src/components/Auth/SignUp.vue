@@ -97,7 +97,7 @@
         this.emailError = pattern.test(this.email) ? '' : 'Please enter a valid email address.';
       },
       validatePassword() {
-        const pattern = new RegExp('^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$');
+        const pattern = new RegExp('^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&()])[A-Za-z\d@$!%*?&()]{8,}$');
         if (!pattern.test(this.password)) {
           this.passwordError = 'Password must be at least 8 characters and include upper case, lower case, number, and special character.';
         } else if (this.password !== this.passwordConfirm) {
