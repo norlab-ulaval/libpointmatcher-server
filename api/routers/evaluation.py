@@ -21,6 +21,11 @@ async def get_evaluations(user: Annotated[User, Depends(get_authorized_user)]):
     return await evaluation_controller.get_evaluations(user)
 
 
+@router.get("/run")
+async def get_runs(user: Annotated[User, Depends(get_authorized_user)]):
+    return await evaluation_controller.get_evaluations_grouped_by_run_id(user)
+
+
 @router.post("/evaluation")
 async def new_evaluation(evaluation: NewEvaluation, user: Annotated[User, Depends(get_authorized_user)]):
     return await evaluation_controller.evaluate_config(user, evaluation.config, evaluation.anonymous)

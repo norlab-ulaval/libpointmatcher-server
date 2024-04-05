@@ -27,3 +27,14 @@ class EvaluationController:
 
     async def get_evaluations(self, user: User):
         return await self.evaluation_repo.fetch_history_from_email(user.email)
+
+    async def get_evaluations_grouped_by_run_id(self, user: User) -> dict[str, list[Evaluation]]:
+        evaluations = await self.evaluation_repo.fetch_history_from_email(user.email)
+
+        groups: dict[str, list[Evaluation]] = {}
+        for evaluation in evaluations:
+            if evaluation.run_id not in groups.keys():
+                groups[evaluation.run_id] = []
+            groups[evaluation.run_id].append(evaluation)
+
+        return groups

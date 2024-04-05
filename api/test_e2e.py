@@ -207,6 +207,21 @@ async def test_evaluation(client: AsyncClient):
 
     assert len(get_evaluations_response.json())
 
+
+@pytest.mark.anyio
+async def test_get_runs(client: AsyncClient):
+    access_token = await register_login(client)
+
+    new_evaluation_response = await client.post('/evaluation', json={'config': 'config', 'anonymous': False}, headers={'Authorization': 'Bearer ' + access_token})
+
+    assert new_evaluation_response.status_code == 200
+
+    get_evaluations_response = await client.get('/run', headers={'Authorization': 'Bearer ' + access_token})
+
+    assert get_evaluations_response.status_code == 200
+
+    assert len(get_evaluations_response.json())
+
 # @pytest.mark.anyio
 # async def test_size_evaluation(client: AsyncClient):
 #     user_data = {
