@@ -101,7 +101,6 @@ export default {
       event.target.value = null;
     },
     processFiles(files) {
-      console.log(this.uploadedFiles)
       const fileList = Array.from(files);
       const yamlFiles = fileList.filter(file => file.name.endsWith('.yml') || file.name.endsWith('.yaml'));   
 
@@ -111,7 +110,6 @@ export default {
           this.displayToast(`A file named "${file.name}" has already been uploaded.`);
         } else {
           this.uploadedFiles.push(file);
-          console.log(this.uploadedFiles)
         }
 
       });
@@ -120,7 +118,6 @@ export default {
       this.uploadedFiles.splice(index, 1);
     },
     async runConfigurations() {
-      console.log('run')
       this.isRunning = true;
       for (const file of this.uploadedFiles) {
         await this.convertAndTransferFile(file);
@@ -146,7 +143,6 @@ export default {
         reader.onload = () => resolve(btoa(reader.result));
         reader.onerror = error => reject(error);
         reader.readAsBinaryString(file);
-        console.log('readFile')
       });
     },
     displayToast(message) {
