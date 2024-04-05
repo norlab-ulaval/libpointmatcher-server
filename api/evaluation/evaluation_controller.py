@@ -12,7 +12,7 @@ class EvaluationController:
         self.evaluator = evaluator
         self.evaluation_repo = evaluation_repo
 
-    async def evaluate_config(self, user: User, config: str, anonymous: bool):
+    async def evaluate_config(self, user: User, config: str, anonymous: bool, name: str = ""):
         run_id = str(uuid.uuid4())
         date = datetime.utcnow()
 
@@ -21,7 +21,7 @@ class EvaluationController:
         for result_type in results.keys():
             result = results.get(result_type)
 
-            evaluation = Evaluation(run_id, user.email, result_type, result, date, anonymous)
+            evaluation = Evaluation(run_id, user.email, result_type, result, date, anonymous, name)
 
             await self.evaluation_repo.save(evaluation)
 
