@@ -59,11 +59,13 @@
         >
         <label for="anonymous" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Anonymous</label>
       </div>
-      <button 
-      class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900 focus:ring ring-blue-300 disabled:opacity-25 transition ease-in-out duration-150"
-      :disabled="uploadedFiles.length === 0"
-      @click="runConfigurations"
-      >Run</button>
+      <button @click="runConfigurations" :disabled="uploadedFiles.length === 0 || isRunning" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900 focus:ring ring-blue-300 disabled:opacity-75 transition ease-in-out duration-150">
+        <template v-if="isRunning">
+          <div class="animate-spin inline-block size-4 border-[3px] border-current border-t-transparent text-white rounded-full" role="status" aria-label="loading"></div>
+          <span class="ms-3">Loading</span>
+        </template>
+        <template v-else>Run</template>
+      </button>
     </div>
   </div>
 </template>
@@ -81,6 +83,7 @@ export default {
       isDragOver: false,
       showWarningToast: false,
       warningMessage: '',
+      isRunning: false,
     };
   },
   methods: {
@@ -118,10 +121,12 @@ export default {
     },
     async runConfigurations() {
       console.log('run')
+      this.isRunning = true;
       for (const file of this.uploadedFiles) {
         await this.convertAndTransferFile(file);
       }
-      this.$router.push({ name: 'home'});
+      this.$router.push({ name: 'profile'});
+      this.isRunning = false;
     },
 
     async convertAndTransferFile(file) {
