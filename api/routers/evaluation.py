@@ -14,7 +14,7 @@ router = APIRouter()
 class NewEvaluation(BaseModel):
     config: str
     anonymous: bool
-    name: str = ""
+    name: str = Field(default_factory=str)
 
 
 @router.get("/evaluation")
