@@ -17,13 +17,14 @@ def _to_json(evaluation: Evaluation):
         'type': evaluation.type,
         'result': evaluation.result,
         'date': evaluation.date,
-        'anonymous': evaluation.anonymous
+        'anonymous': evaluation.anonymous,
+        'name': evaluation.name
     }
 
 
 def _from_json(json):
     return Evaluation(json['run_id'], json['user_email'], json['type'],
-                      json['result'], json['date'], json['anonymous'])
+                      json['result'], json['date'], json['anonymous'], json['name'])
 
 
 class EvaluationMongo(EvaluationRepo, LeaderboardRepo):
@@ -80,12 +81,9 @@ class EvaluationMongo(EvaluationRepo, LeaderboardRepo):
 
         for doc in await cursor.to_list(length=None):
             email = '' if doc['anonymous'] else doc['_id']
-            entries.append(LeaderboardEntry(email, doc['result'], type, 'demo', doc['date']))
+            entries.append(LeaderboardEntry(username=email, score=doc['result'], score_type=type, version='demo', date=doc['date']))
 
         return entries
       
     async def get_all_types(self) -> list[str]:
         return await self.collection.find({}, {'type': 1}).distinct('type')
-
-    async def get_size(self) -> int:
-        return await self.collection.count_documents({})
