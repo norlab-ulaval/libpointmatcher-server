@@ -17,13 +17,14 @@ def _to_json(evaluation: Evaluation):
         'type': evaluation.type,
         'result': evaluation.result,
         'date': evaluation.date,
-        'anonymous': evaluation.anonymous
+        'anonymous': evaluation.anonymous,
+        'name': evaluation.name
     }
 
 
 def _from_json(json):
     return Evaluation(json['run_id'], json['user_email'], json['type'],
-                      json['result'], json['date'], json['anonymous'])
+                      json['result'], json['date'], json['anonymous'], json['name'])
 
 
 class EvaluationMongo(EvaluationRepo, LeaderboardRepo):
