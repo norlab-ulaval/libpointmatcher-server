@@ -197,7 +197,7 @@ async def test_register_then_try_login_with_wrong_password(client: AsyncClient):
 async def test_evaluation(client: AsyncClient):
     access_token = await register_login(client)
 
-    new_evaluation_response = await client.post('/evaluation', json={'config': 'config', 'anonymous': False}, headers={'Authorization': 'Bearer ' + access_token})
+    new_evaluation_response = await client.post('/evaluation', json={'config': 'config', 'anonymous': False, 'name': 'evaluation_name'}, headers={'Authorization': 'Bearer ' + access_token})
 
     assert new_evaluation_response.status_code == 200
 

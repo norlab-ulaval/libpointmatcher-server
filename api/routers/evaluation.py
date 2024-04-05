@@ -14,6 +14,7 @@ router = APIRouter()
 class NewEvaluation(BaseModel):
     config: str
     anonymous: bool
+    name: str = ""
 
 
 @router.get("/evaluation")
@@ -23,4 +24,4 @@ async def get_evaluations(user: Annotated[User, Depends(get_authorized_user)]):
 
 @router.post("/evaluation")
 async def new_evaluation(evaluation: NewEvaluation, user: Annotated[User, Depends(get_authorized_user)]):
-    return await evaluation_controller.evaluate_config(user, evaluation.config, evaluation.anonymous)
+    return await evaluation_controller.evaluate_config(user, evaluation.config, evaluation.anonymous, evaluation.name)
