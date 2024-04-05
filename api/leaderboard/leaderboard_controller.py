@@ -39,7 +39,7 @@ class LeaderboardController:
         return leaderboard_response
 
     def rank_leaderboard(self, leaderboard: List[LeaderboardEntry]) -> List[LeaderboardEntry]:
-        sorted_leaderboard = sorted(leaderboard, key=lambda x: x.score, reverse=True)
+        sorted_leaderboard = sorted(leaderboard, key=lambda x: x.score, reverse=False)
 
         # If we want to rank it, for example to save it
         # for rank, entry in enumerate(sorted_leaderboard, start=1):

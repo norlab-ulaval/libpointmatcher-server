@@ -119,7 +119,7 @@ export const getScoreTypes = async () => {
 };
 
 
-export const transferFile = async (configString, anonymousBool) => {
+export const transferFile = async (configBase64, anonymousBool) => {
   const token = Cookies.get("token");
 
   try {
@@ -127,8 +127,9 @@ export const transferFile = async (configString, anonymousBool) => {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${token}`,
+        "content-type": "application/json"
       },
-      body: JSON.stringify({evaluation:{config: configString, anonymous: anonymousBool}})
+      body: JSON.stringify({ config: configBase64, anonymous: anonymousBool })
     });
 
     const response = await fetch(request);
