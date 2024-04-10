@@ -9,43 +9,30 @@ class LeaderboardController:
     def __init__(self, leaderboard_repo: LeaderboardRepo):
         self.leaderboard_repo = leaderboard_repo
 
-    async def _find_by_type(self, type: str):
-        return await self.leaderboard_repo.find_by_type(type)
+    async def _find_by_type(self, type: str, page: int, limit: int):
+        return await self.leaderboard_repo.find_by_type_and_limits(type, page, limit)
 
-    async def _find_all(self):
-        return await self.leaderboard_repo.find_all()
+    async def _find_all(self, page: int, limit: int):
+        return await self.leaderboard_repo.find_by_limits(page, limit)
 
-    async def _get_leaderboard_size(self, leaderboard: List[LeaderboardEntry]) -> int:
-        return len(leaderboard)
+    async def _get_leaderboard_size(self) -> int:
+        return await self.leaderboard_repo.get_size()
 
     async def get_leaderboard(self, page: int, limit: int, type: Optional[str] = None) -> Leaderboard:
         if type is not None and type != "all":
-            leaderboard = await self._find_by_type(type)
+            leaderboard = await self._find_by_type(type, page, limit)
         else:
-            leaderboard = await self._find_all()
+            leaderboard = await self._find_all(page, limit)
 
-        if leaderboard:
-            sorted_leaderboard = self.rank_leaderboard(leaderboard)
-        else:
+        if not leaderboard:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                                 detail="Error loading the leaderboard")
 
-        start_index = (page - 1) * limit
-        end_index = start_index + limit
-        size = await self._get_leaderboard_size(sorted_leaderboard)
+        size = await self._get_leaderboard_size()
 
-        leaderboard_response = Leaderboard(entries=sorted_leaderboard[start_index:end_index], total=size)
+        leaderboard_response = Leaderboard(entries=leaderboard, total=size)
 
         return leaderboard_response
-
-    def rank_leaderboard(self, leaderboard: List[LeaderboardEntry]) -> List[LeaderboardEntry]:
-        sorted_leaderboard = sorted(leaderboard, key=lambda x: x.score, reverse=False)
-
-        # If we want to rank it, for example to save it
-        # for rank, entry in enumerate(sorted_leaderboard, start=1):
-        #     entry.rank = rank
-
-        return sorted_leaderboard
 
     async def get_all_types(self) -> list[str]:
         return await self.leaderboard_repo.get_all_types()
