@@ -40,7 +40,11 @@
             <tr v-for="(entry, index) in filteredLeaderboard" :key="index" class="leaderboard-row bg-white border-b">
               <td class="px-6 py-3.5">{{ formatDate(entry.date) }}</td>
               <td class="px-6 py-3.5">{{ entry.version }}</td>
-              <td class="px-6 py-3.5">{{ entry.username }}</td>
+              <td class="px-6 py-3.5">
+                <span :class="{'italic': !entry.username}">
+                  {{ entry.username || 'hidden username' }}
+                </span>
+              </td>
               <td class="px-6 py-3.5">{{ formatScore(entry.score) }}</td>
               <td class="px-6 py-3.5">{{ capitalizeFirstLetter(entry.score_type) }}</td>
             </tr>
