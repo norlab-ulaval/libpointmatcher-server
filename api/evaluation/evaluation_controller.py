@@ -4,13 +4,15 @@ from datetime import datetime
 from evaluation.evaluation import EvaluationOld, Evaluation, Iteration
 from evaluation.evaluation_repo import EvaluationRepo
 from evaluation.evaluator import Evaluator
+from evaluation.new_evaluation_listener import NewEvaluationListener
 from user.user import User
 
 
 class EvaluationController:
-    def __init__(self, evaluator: Evaluator, evaluation_repo: EvaluationRepo):
+    def __init__(self, evaluator: Evaluator, evaluation_repo: EvaluationRepo, new_evaluation_listener: NewEvaluationListener):
         self.evaluator = evaluator
         self.evaluation_repo = evaluation_repo
+        self.new_evaluation_listener = new_evaluation_listener
 
     async def evaluate_config(self, user: User, config: str, anonymous: bool, evaluation_name: str = ""):
         # To decode the file use something like :
@@ -20,12 +22,18 @@ class EvaluationController:
 
         results = self.evaluator.evaluate_config(config)
 
+        new_evaluations = []
+
         for result_type in results.keys():
             result = results.get(result_type)
 
             evaluation = Evaluation(run_id, user.email, result_type, evaluation_name, 'demo.csv', [Iteration(result, result, [])], date, anonymous)
 
+            new_evaluations.append(evaluation)
+
             await self.evaluation_repo.save(evaluation)
+
+        await self.new_evaluation_listener.notify_batch(new_evaluations)
 
     async def get_evaluations(self, user: User):
         evaluations = await self.evaluation_repo.fetch_history_from_email(user.email)

@@ -1,5 +1,7 @@
 from motor.core import AgnosticDatabase, AgnosticCollection
 
+from evaluation.evaluation import Evaluation
+from evaluation.new_evaluation_listener import NewEvaluationListener
 from leaderboard.leaderboard_entry import LeaderboardEntry
 from leaderboard.leaderboard_repo import LeaderboardRepo
 
@@ -21,7 +23,7 @@ def _from_json(json):
                             json['translation_error'], json['date'], json['release_version'])
 
 
-class LeaderboardMongo(LeaderboardRepo):
+class LeaderboardMongo(LeaderboardRepo, NewEvaluationListener):
     def __init__(self, mongo_database: AgnosticDatabase):
         self.collection: AgnosticCollection = mongo_database['leaderboard']
 
@@ -81,3 +83,31 @@ class LeaderboardMongo(LeaderboardRepo):
 
     async def get_all_types(self) -> list[str]:
         return await self.collection.find({}, {'type': 1}).distinct('type')
+
+    async def notify_batch(self, evaluations: list[Evaluation]):
+        for evaluation in evaluations:
+            if evaluation.iterations:
+                rotation_error = 0
+                translation_error = 0
+
+                for iteration in evaluation.iterations:
+                    rotation_error = rotation_error + iteration.rotation_error
+                    translation_error = translation_error + iteration.translation_error
+
+                rotation_error = rotation_error / len(evaluation.iterations)
+                translation_error = translation_error / len(evaluation.iterations)
+
+                entry = LeaderboardEntry(evaluation.file_name, evaluation.type, evaluation.user_email,
+                                         rotation_error, translation_error, evaluation.date, "demo")
+
+                doc = await self.collection.find_one({'file_name': entry.file_name, 'type': entry.type},
+                                                     {'rotation_error': 1, 'translation_error': 1})
+
+                if doc:
+                    if doc['rotation_error'] < entry.rotation_error:
+                        entry.rotation_error = doc['rotation_error']
+                    if doc['translation_error'] < entry.translation_error:
+                        entry.translation_error = doc['translation_error']
+
+                await self.collection.replace_one({'file_name': entry.file_name, 'type': entry.type},
+                                                  _to_json(entry))

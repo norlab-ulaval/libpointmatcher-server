@@ -24,7 +24,7 @@ libpointmatcher_adapter = LibpointmatcherAdapter()
 
 user_controller = UserController(user_mongo)
 leaderboard_controller = LeaderboardController(leaderboard_mongo)
-evaluation_controller = EvaluationController(libpointmatcher_adapter, evaluation_mongo)
+evaluation_controller = EvaluationController(libpointmatcher_adapter, evaluation_mongo, leaderboard_mongo)
 
 authorization.user_controller = user_controller
 example.user_controller = user_controller

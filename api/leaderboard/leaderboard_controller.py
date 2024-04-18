@@ -24,6 +24,8 @@ class LeaderboardController:
         else:
             leaderboard = await self._find_all(page, limit)
 
+        leaderboard = self.convert_entries_to_old(leaderboard)
+
         size = await self._get_leaderboard_size()
 
         leaderboard_response = Leaderboard(entries=leaderboard, total=size)

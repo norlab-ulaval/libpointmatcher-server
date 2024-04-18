@@ -58,22 +58,3 @@ class EvaluationMongo(EvaluationRepo):
     async def save(self, evaluation: Evaluation):
         await self.collection.insert_one(_to_json(evaluation))
 
-    # TODO move to own repo
-    async def find_all(self) -> list[LeaderboardEntry]:
-        entries = []
-
-        cursor = self.collection.aggregate([
-            {'$sort': {'result': 1}},
-            {'$group': {
-                '_id': {'user_email': '$user_email', 'type': '$type'},
-                'result': {'$first': '$result'},
-                'date': {'$first': '$date'},
-                'anonymous': {'$first': '$anonymous'}
-            }}
-        ])
-
-        for doc in await cursor.to_list(length=None):
-            email = '' if doc['anonymous'] else doc['_id']['user_email']
-            entries.append(LeaderboardEntry(username=email, score=doc['result'], score_type=doc['_id']['type'], version='demo', date=doc['date']))
-
-        return entries
