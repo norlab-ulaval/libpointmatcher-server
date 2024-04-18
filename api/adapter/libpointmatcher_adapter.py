@@ -10,6 +10,6 @@ from evaluation.result import Result
 class LibpointmatcherAdapter(Evaluator):
     def evaluate_config(self, config: str) -> Result:
         with connect(f"ws://{env.get('LIBPOINTMATCHER_WS', 'localhost:8765')}") as websocket:
-            websocket.send('test')
+            websocket.send(config)
             results = websocket.recv()
             return json.loads(results)

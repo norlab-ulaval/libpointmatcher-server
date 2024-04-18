@@ -97,7 +97,7 @@ services:
 
   libpointmatcher:
     image: libpointmatcher
-    command: 'evaluate_config_server.py --ws 8765 --config a --point-cloud a --output a --seed 1'
+    command: 'evaluate_config_server.py --ws 8765 --config a --path /libraries/libpointmatcher/evaluations/demo/ --output a --seed 30'
     ports:
       - '8765:8765'
     networks:
