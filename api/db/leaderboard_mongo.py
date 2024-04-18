@@ -110,4 +110,4 @@ class LeaderboardMongo(LeaderboardRepo, NewEvaluationListener):
                         entry.translation_error = doc['translation_error']
 
                 await self.collection.replace_one({'file_name': entry.file_name, 'type': entry.type},
-                                                  _to_json(entry))
+                                                  _to_json(entry), True)

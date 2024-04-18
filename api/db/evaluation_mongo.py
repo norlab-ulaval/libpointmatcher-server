@@ -36,7 +36,7 @@ def _from_json(json):
                                     iteration_json['transformation']))
 
     return Evaluation(json['run_id'], json['user_email'], json['type'], json['evaluation_name'],
-                      json['file_name'], json['iterations'], json['date'], json['anonymous'])
+                      json['file_name'], iterations, json['date'], json['anonymous'])
 
 
 class EvaluationMongo(EvaluationRepo):
