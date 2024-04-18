@@ -1,30 +1,42 @@
-import asyncio
-import os
-
 from motor.core import AgnosticDatabase, AgnosticCollection
 
-from db import mongo
-from evaluation.evaluation import Evaluation
+from evaluation.evaluation import Evaluation, Iteration
 from evaluation.evaluation_repo import EvaluationRepo
 from leaderboard.leaderboard_entry import LeaderboardEntry
 from leaderboard.leaderboard_repo import LeaderboardRepo
 
 
 def _to_json(evaluation: Evaluation):
+    iterations = []
+
+    for iteration in evaluation.iterations:
+        iterations.append({
+            'rotation_error': iteration.rotation_error,
+            'translation_error': iteration.translation_error,
+            'transformation': iteration.transformation
+        })
+
     return {
         'run_id': evaluation.run_id,
         'user_email': evaluation.user_email,
         'type': evaluation.type,
-        'result': evaluation.result,
+        'evaluation_name': evaluation.evaluation_name,
+        'file_name': evaluation.file_name,
+        'iterations': iterations,
         'date': evaluation.date,
-        'anonymous': evaluation.anonymous,
-        'name': evaluation.name
+        'anonymous': evaluation.anonymous
     }
 
 
 def _from_json(json):
-    return Evaluation(json['run_id'], json['user_email'], json['type'],
-                      json['result'], json['date'], json['anonymous'], json['name'])
+    iterations = []
+
+    for iteration_json in json['iterations']:
+        iterations.append(Iteration(iteration_json['rotation_error'], iteration_json['translation_error'],
+                                    iteration_json['transformation']))
+
+    return Evaluation(json['run_id'], json['user_email'], json['type'], json['evaluation_name'],
+                      json['file_name'], json['iterations'], json['date'], json['anonymous'])
 
 
 class EvaluationMongo(EvaluationRepo, LeaderboardRepo):
@@ -46,6 +58,7 @@ class EvaluationMongo(EvaluationRepo, LeaderboardRepo):
     async def save(self, evaluation: Evaluation):
         await self.collection.insert_one(_to_json(evaluation))
 
+    # TODO move to own repo
     async def find_all(self) -> list[LeaderboardEntry]:
         entries = []
 
@@ -65,6 +78,7 @@ class EvaluationMongo(EvaluationRepo, LeaderboardRepo):
 
         return entries
 
+    # TODO move to own repo
     async def find_by_type(self, type: str) -> list[LeaderboardEntry]:
         entries = []
 
@@ -85,6 +99,7 @@ class EvaluationMongo(EvaluationRepo, LeaderboardRepo):
 
         return entries
 
+    # TODO move to own repo
     async def find_by_type_and_limits(self, type: str, page: int, per_page: int) -> list[LeaderboardEntry]:
         entries = []
         skip_count = per_page * (page - 1)
@@ -109,6 +124,7 @@ class EvaluationMongo(EvaluationRepo, LeaderboardRepo):
 
         return entries
 
+    # TODO move to own repo
     async def find_by_limits(self, page: int, per_page: int) -> list[LeaderboardEntry]:
         entries = []
         skip_count = per_page * (page - 1)
