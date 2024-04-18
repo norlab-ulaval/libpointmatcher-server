@@ -39,7 +39,7 @@ def _from_json(json):
                       json['file_name'], json['iterations'], json['date'], json['anonymous'])
 
 
-class EvaluationMongo(EvaluationRepo, LeaderboardRepo):
+class EvaluationMongo(EvaluationRepo):
     def __init__(self, mongo_database: AgnosticDatabase):
         self.collection: AgnosticCollection = mongo_database['evaluations']
 
@@ -77,90 +77,3 @@ class EvaluationMongo(EvaluationRepo, LeaderboardRepo):
             entries.append(LeaderboardEntry(username=email, score=doc['result'], score_type=doc['_id']['type'], version='demo', date=doc['date']))
 
         return entries
-
-    # TODO move to own repo
-    async def find_by_type(self, type: str) -> list[LeaderboardEntry]:
-        entries = []
-
-        cursor = self.collection.aggregate([
-            {'$match': {'type': type}},
-            {'$sort': {'result': 1}},
-            {'$group': {
-                '_id': '$user_email',
-                'result': {'$first': '$result'},
-                'date': {'$first': '$date'},
-                'anonymous': {'$first': '$anonymous'}
-            }}
-        ])
-
-        for doc in await cursor.to_list(length=None):
-            email = '' if doc['anonymous'] else doc['_id']
-            entries.append(LeaderboardEntry(username=email, score=doc['result'], score_type=type, version='demo', date=doc['date']))
-
-        return entries
-
-    # TODO move to own repo
-    async def find_by_type_and_limits(self, type: str, page: int, per_page: int) -> list[LeaderboardEntry]:
-        entries = []
-        skip_count = per_page * (page - 1)
-
-        cursor = self.collection.aggregate([
-            {'$match': {'type': type}},
-            {'$sort': {'result': 1}},
-            {'$group': {
-                '_id': '$user_email',
-                'result': {'$first': '$result'},
-                'date': {'$first': '$date'},
-                'anonymous': {'$first': '$anonymous'}
-            }},
-            {'$skip': skip_count},
-            {'$limit': per_page}
-        ])
-
-        for doc in await cursor.to_list(length=None):
-            email = '' if doc['anonymous'] else doc['_id']
-            entries.append(LeaderboardEntry(username=email, score=doc['result'], score_type=type, version='demo',
-                                            date=doc['date']))
-
-        return entries
-
-    # TODO move to own repo
-    async def find_by_limits(self, page: int, per_page: int) -> list[LeaderboardEntry]:
-        entries = []
-        skip_count = per_page * (page - 1)
-
-        cursor = self.collection.aggregate([
-            {'$sort': {'result': 1}},
-            {'$group': {
-                '_id': {'user_email': '$user_email', 'type': '$type'},
-                'result': {'$first': '$result'},
-                'date': {'$first': '$date'},
-                'anonymous': {'$first': '$anonymous'}
-            }},
-            {'$skip': skip_count},
-            {'$limit': per_page}
-        ])
-
-        for doc in await cursor.to_list(length=None):
-            email = '' if doc['anonymous'] else doc['_id']['user_email']
-            entries.append(
-                LeaderboardEntry(username=email, score=doc['result'], score_type=doc['_id']['type'], version='demo',
-                                 date=doc['date']))
-
-        return entries
-
-    async def get_size(self) -> int:
-        cursor = self.collection.aggregate([
-            {'$group': {
-                '_id': {'user_email': '$user_email', 'type': '$type'}
-            }},
-            {'$count': 'count'}
-        ])
-
-        async for doc in cursor:
-            count = doc['count']
-
-        return count if count else 0
-
-    async def get_all_types(self) -> list[str]:
-        return await self.collection.find({}, {'type': 1}).distinct('type')
