@@ -1,35 +1,35 @@
 services:
-#  web:
-#    build:
-#      context: ./web/libpointmatcher-server-interface
-#    ports:
-#      - "8000:8000"
-#    depends_on:
-#      api:
-#        condition: service_started
-#    networks:
-#      - internal
-#    environment:
-#      VITE_API_URI: "http://api:8080"
+  web:
+    build:
+      context: ./web/libpointmatcher-server-interface
+    ports:
+      - "8000:8000"
+    depends_on:
+      api:
+        condition: service_started
+    networks:
+      - internal
+    environment:
+      VITE_API_URI: "http://api:8080"
 
-#  test-api:
-#    build:
-#      context: ./api
-#      dockerfile: ./Dockerfile-test
-#    depends_on:
-#      mongo:
-#        condition: service_healthy
-#      cache:
-#        condition: service_started
-#      libpointmatcher:
-#        condition: service_started
-#    env_file:
-#      - .env
-#    networks:
-#      - internal
-#    environment:
-#      MONGO_URI: "mongo:27017"
-#      REDIS_URI: "cache"
+  test-api:
+    build:
+      context: ./api
+      dockerfile: ./Dockerfile-test
+    depends_on:
+      mongo:
+        condition: service_healthy
+      cache:
+        condition: service_started
+      libpointmatcher:
+        condition: service_started
+    env_file:
+      - .env
+    networks:
+      - internal
+    environment:
+      MONGO_URI: "mongo:27017"
+      REDIS_URI: "cache"
 
   api:
    build:
@@ -41,8 +41,8 @@ services:
        condition: service_healthy
      cache:
        condition: service_started
-#     test-api:
-#       condition: service_completed_successfully
+     test-api:
+       condition: service_completed_successfully
      libpointmatcher:
        condition: service_started
    env_file:
