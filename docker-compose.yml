@@ -30,6 +30,8 @@ services:
     environment:
       MONGO_URI: "mongo:27017"
       REDIS_URI: "cache"
+    volumes:
+      - ./data:/app/data/:ro
 
   api:
    build:
@@ -52,6 +54,8 @@ services:
    environment:
      MONGO_URI: "mongo:27017"
      REDIS_URI: "cache"
+   volumes:
+     - ./data:/app/data/:ro
 
   mongo:
     image: mongo
@@ -85,7 +89,7 @@ services:
       ME_CONFIG_MONGODB_URL: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongo:27017/
     networks:
       - internal
-      
+
   cache:
     image: redis:6.2-alpine
     restart: always
@@ -104,6 +108,8 @@ services:
       - '8765:8765'
     networks:
       - internal
+    volumes:
+     - ./data:/libraries/libpointmatcher/evaluations/demo/
 
 networks:
   internal:
