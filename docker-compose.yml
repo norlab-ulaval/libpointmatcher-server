@@ -1,17 +1,17 @@
 services:
-  web:
-    build:
-      context: ./web/libpointmatcher-server-interface
-    ports:
-      - "8000:8000"
-    depends_on:
-      api:
-        condition: service_started
-    networks:
-      - internal
-    environment:
-      VITE_API_URI: "http://api:8080"
-
+#  web:
+#    build:
+#      context: ./web/libpointmatcher-server-interface
+#    ports:
+#      - "8000:8000"
+#    depends_on:
+#      api:
+#        condition: service_started
+#    networks:
+#      - internal
+#    environment:
+#      VITE_API_URI: "http://api:8080"
+#
   test-api:
     build:
       context: ./api
@@ -30,6 +30,8 @@ services:
     environment:
       MONGO_URI: "mongo:27017"
       REDIS_URI: "cache"
+    volumes:
+      - ./data:/app/data/:ro
 
   api:
    build:
@@ -52,6 +54,8 @@ services:
    environment:
      MONGO_URI: "mongo:27017"
      REDIS_URI: "cache"
+   volumes:
+     - ./data:/app/data/:ro
 
   mongo:
     image: mongo
@@ -70,22 +74,22 @@ services:
       - internal
     volumes:
       - ./db/mongo:/data/db/
-
-  mongo-express:
-    image: mongo-express
-    restart: always
-    ports:
-      - "8181:8081"
-    depends_on:
-      mongo:
-        condition: service_healthy
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_USERNAME}
-      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_PASSWORD}
-      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongo:27017/
-    networks:
-      - internal
-      
+#
+#  mongo-express:
+#    image: mongo-express
+#    restart: always
+#    ports:
+#      - "8181:8081"
+#    depends_on:
+#      mongo:
+#        condition: service_healthy
+#    environment:
+#      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_USERNAME}
+#      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_PASSWORD}
+#      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongo:27017/
+#    networks:
+#      - internal
+#
   cache:
     image: redis:6.2-alpine
     restart: always
@@ -104,6 +108,8 @@ services:
       - '8765:8765'
     networks:
       - internal
+    volumes:
+     - ./data:/libraries/libpointmatcher/evaluations/demo/
 
 networks:
   internal:
