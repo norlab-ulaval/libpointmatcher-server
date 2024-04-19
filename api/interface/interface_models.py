@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
-from leaderboard.leaderboard_entry import LeaderboardEntry
+from leaderboard.leaderboard_entry import LeaderboardEntry, LeaderboardEntryOld
+
 
 class Token(BaseModel):
     access_token: str
@@ -28,6 +29,7 @@ class LeaderboardQuery(BaseModel):
     type: str = "all"
 
 
-class Leaderboard(BaseModel):
-    entries: list[LeaderboardEntry] = Field(default_factory=list)
-    total: int
+class Leaderboard:
+    def __init__(self, entries: list[LeaderboardEntryOld], total: int):
+        self.entries = entries
+        self.total = total

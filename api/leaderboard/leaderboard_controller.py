@@ -1,5 +1,5 @@
 from interface.interface_models import Leaderboard
-from leaderboard.leaderboard_entry import LeaderboardEntry
+from leaderboard.leaderboard_entry import LeaderboardEntry, LeaderboardEntryOld
 from leaderboard.leaderboard_repo import LeaderboardRepo
 from typing import Optional, List
 from fastapi import HTTPException, status
@@ -24,15 +24,21 @@ class LeaderboardController:
         else:
             leaderboard = await self._find_all(page, limit)
 
-        if not leaderboard:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                                detail="Error loading the leaderboard")
+        leaderboard_old = self.convert_entries_to_old(leaderboard)
 
         size = await self._get_leaderboard_size()
 
-        leaderboard_response = Leaderboard(entries=leaderboard, total=size)
+        leaderboard_response = Leaderboard(entries=leaderboard_old, total=size)
 
         return leaderboard_response
 
     async def get_all_types(self) -> list[str]:
         return await self.leaderboard_repo.get_all_types()
+
+    def convert_entries_to_old(self, entries: list[LeaderboardEntry]) -> list[LeaderboardEntryOld]:
+        entries_old = []
+
+        for e in entries:
+            entries_old.append(LeaderboardEntryOld(e.user_email, e.rotation_error, e.type, e.release_version, e.date))
+
+        return entries_old

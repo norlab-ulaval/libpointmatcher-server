@@ -1,19 +1,20 @@
 import uuid
 from datetime import datetime
-import base64
 
-from evaluation.evaluation import Evaluation
+from evaluation.evaluation import EvaluationOld, Evaluation, Iteration
 from evaluation.evaluation_repo import EvaluationRepo
 from evaluation.evaluator import Evaluator
+from evaluation.new_evaluation_listener import NewEvaluationListener
 from user.user import User
 
 
 class EvaluationController:
-    def __init__(self, evaluator: Evaluator, evaluation_repo: EvaluationRepo):
+    def __init__(self, evaluator: Evaluator, evaluation_repo: EvaluationRepo, new_evaluation_listener: NewEvaluationListener):
         self.evaluator = evaluator
         self.evaluation_repo = evaluation_repo
+        self.new_evaluation_listener = new_evaluation_listener
 
-    async def evaluate_config(self, user: User, config: str, anonymous: bool, name: str = ""):
+    async def evaluate_config(self, user: User, config: str, anonymous: bool, evaluation_name: str = ""):
         # To decode the file use something like :
         # base64.b64decode(config).decode('utf-8')
         run_id = str(uuid.uuid4())
@@ -21,23 +22,42 @@ class EvaluationController:
 
         results = self.evaluator.evaluate_config(config)
 
+        new_evaluations = []
+
         for result_type in results.keys():
             result = results.get(result_type)
 
-            evaluation = Evaluation(run_id, user.email, result_type, result, date, anonymous, name)
+            evaluation = Evaluation(run_id, user.email, result_type, evaluation_name, 'demo.csv', [Iteration(result, result, [])], date, anonymous)
+
+            new_evaluations.append(evaluation)
 
             await self.evaluation_repo.save(evaluation)
 
-    async def get_evaluations(self, user: User):
-        return await self.evaluation_repo.fetch_history_from_email(user.email)
+        await self.new_evaluation_listener.notify_batch(new_evaluations)
 
-    async def get_evaluations_grouped_by_run_id(self, user: User) -> dict[str, list[Evaluation]]:
+    async def get_evaluations(self, user: User):
         evaluations = await self.evaluation_repo.fetch_history_from_email(user.email)
 
-        groups: dict[str, list[Evaluation]] = {}
+        return self.evaluation_old_convert(evaluations)
+
+    async def get_evaluations_grouped_by_run_id(self, user: User) -> dict[str, list[EvaluationOld]]:
+        evaluations = await self.evaluation_repo.fetch_history_from_email(user.email)
+
+        evaluations = self.evaluation_old_convert(evaluations)
+
+        groups: dict[str, list[EvaluationOld]] = {}
         for evaluation in evaluations:
             if evaluation.run_id not in groups.keys():
                 groups[evaluation.run_id] = []
             groups[evaluation.run_id].append(evaluation)
 
         return groups
+
+    def evaluation_old_convert(self, evaluations: list[Evaluation]) -> list[EvaluationOld]:
+        evaluations_old = []
+
+        for e in evaluations:
+            evaluations_old.append(EvaluationOld(e.run_id, e.user_email, e.type, e.iterations[0].rotation_error,
+                                                 e.date, e.anonymous, e.evaluation_name))
+
+        return evaluations_old
