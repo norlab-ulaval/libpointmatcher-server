@@ -21,9 +21,12 @@ class EvaluationController:
         evaluation_results = self.evaluator.evaluate_config(config)
 
         new_evaluations = []
+        for result_type in results.keys():
+            result = results.get(result_type)
 
-        for type in evaluation_results.keys():
-            evaluations_of_type = evaluation_results.get(type)
+            evaluation = Evaluation(run_id, user.email, result_type, evaluation_name, 'demo.csv', [Iteration(result, result, [])], date, anonymous)
+
+            new_evaluations.append(evaluation)
 
             for file_name in evaluations_of_type.keys():
                 file_evaluation = evaluations_of_type.get(file_name)
