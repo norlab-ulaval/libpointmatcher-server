@@ -1,6 +1,3 @@
-from evaluation.result import Result
-
-
 class Evaluator:
-    def evaluate_config(self, config: str) -> Result:
+    def evaluate_config(self, config: str) -> dict[str, dict[str, dict[str, list]]]:
         pass
