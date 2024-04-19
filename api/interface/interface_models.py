@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from leaderboard.leaderboard_entry import LeaderboardEntry, LeaderboardEntryOld
+from leaderboard.leaderboard_entry import LeaderboardEntry
 
 
 class Token(BaseModel):

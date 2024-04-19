@@ -31,7 +31,7 @@
             <tr>
               <th scope="col" class="w-1/8 px-6 py-3">Date</th>
               <th scope="col" class="w-1/8 px-6 py-3">Release version</th>
-              <th scope="col" class="w-1/4 px-6 py-3">Username</th>
+              <th scope="col" class="w-1/4 px-6 py-3">User email</th>
               <th scope="col" class="w-1/8 px-6 py-3">Rotation error</th>
               <th scope="col" class="w-1/8 px-6 py-3">Translation error</th>
               <th scope="col" class="w-1/8 px-6 py-3">Type</th>
@@ -43,12 +43,12 @@
               <td class="px-6 py-3.5">{{ entry.release_version }}</td>
               <td class="px-6 py-3.5">
                 <span :class="{'italic': !entry.user_email}">
-                  {{ entry.username || 'hidden username' }}
+                  {{ entry.user_email || 'hidden username' }}
                 </span>
               </td>
               <td class="px-6 py-3.5">{{ formatScore(entry.rotation_error) }}</td>
               <td class="px-6 py-3.5">{{ formatScore(entry.translation_error) }}</td>
-              <td class="px-6 py-3.5">{{ capitalizeFirstLetter(entry.score_type) }}</td>
+              <td class="px-6 py-3.5">{{ capitalizeFirstLetter(entry.type) }}</td>
             </tr>
           </tbody>
         </table>

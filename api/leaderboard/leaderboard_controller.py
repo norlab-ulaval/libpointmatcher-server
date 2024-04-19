@@ -1,5 +1,4 @@
 from interface.interface_models import Leaderboard
-from leaderboard.leaderboard_entry import LeaderboardEntry, LeaderboardEntryOld
 from leaderboard.leaderboard_repo import LeaderboardRepo
 from typing import Optional, List
 from fastapi import HTTPException, status
