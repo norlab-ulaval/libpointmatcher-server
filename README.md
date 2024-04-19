@@ -34,6 +34,8 @@ docker compose down --rmi local
 
 [doc's readme](api/README.md)
 
+[libpointmatcher's readme](libpointmatcher/README.md)
+
 ## Database readme
 [data's readme](data/README.md)
 
