@@ -34,7 +34,7 @@
                   <option v-for="(iteration, index) in selectedRun.iterations" :value="index">{{ index }}</option>
                 </select>                
                 <div v-if="getBothSelected()">                          
-                  <PointsVisualizer :width="600" :height="400" :data="csvData" :transform="getSelectedIteration().transformation" />
+                  <PointsVisualizer :width="600" :height="400" :data="getSelectedData()" :transform="getSelectedIteration().transformation" />
                 </div>
                 <div v-else>
                   <PointsVisualizer :width="600" :height="400" :data="csvData" />
@@ -55,6 +55,7 @@
 
 <script>
 import PointsVisualizer from '../3d/PointsVisualizer.vue';
+import { files } from '@/components/3d/dataLoader'
 
 export default {
   name: 'PreviousEvaluation',
@@ -138,6 +139,9 @@ export default {
       console.log(this.selectedRun.iterations[this.selectedIteration].transformation)
 
       return this.selectedRun.iterations[this.selectedIteration];
+    },
+    getSelectedData() {
+      return files[this.selectedRun.type][this.selectedRun.file_name]
     }
   },
   computed: {

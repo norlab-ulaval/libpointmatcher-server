@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-on:mouseenter="entering" v-on:mouseleave="leaving" v-on:mousemove="tryUpdateRender" ref="visualizer"></div>
-    <button v-if="!addedPoints" @click="applyTransform">Add more points</button>
+    <!--<button v-if="!addedPoints" @click="applyTransform">Add more points</button>-->
   </div>
 </template>
 
@@ -143,6 +143,7 @@ export default {
       this.pointsData = JSON.parse(JSON.stringify(this.data));
       this.initThree();
       this.updateRender();
+      this.applyTransform();
     }
   },
   watch: {

@@ -171,7 +171,7 @@ export const getRuns = async () => {
 
 export const getFiles = async () => {
   try {
-    const request = new Request(`/data`, {
+    const request = new Request(`${endpoint}/files`, {
       method: "GET",
       headers: {
         "content-type": "application/json"
@@ -185,7 +185,10 @@ export const getFiles = async () => {
       throw new Error(jsonResponse.detail || "Failed to get evaluations. Please try again.");
     }
 
-    return { success: true, runs: jsonResponse };
+    console.log("Received files...")
+    console.log(jsonResponse)
+
+    return { success: true, files: jsonResponse };
   } catch (error) {
     return { success: false, error: "Network error or server is unreachable."};
   }

@@ -1,4 +1,6 @@
 import uuid
+import os
+import csv
 from datetime import datetime
 
 from evaluation.evaluation import EvaluationOld, Evaluation, Iteration
@@ -73,3 +75,28 @@ class EvaluationController:
                                                  e.date, e.anonymous, e.evaluation_name))
 
         return evaluations_old
+    
+    def get_files(self):
+        filepath = "/app/data/"
+        directories = [[x[0], x[2]] for x in  os.walk(filepath) if x[0] != filepath]
+        
+        ordered_files = {}
+        for diff_path, files in directories:
+            difficulty = diff_path.split("/")[-1]
+
+            if ordered_files.get(difficulty) is None:
+                ordered_files[difficulty] = {}
+
+            for i, file in enumerate(files):
+                cloud_path = diff_path + "/" + file
+
+                if ordered_files.get(difficulty).get(file) is None:
+                    ordered_files[difficulty][file] = []
+
+                with open(cloud_path, "r") as f:
+                    csv_reader = csv.DictReader(f)
+                    for line in csv_reader:
+                        ordered_files[difficulty][file].append(line)                
+
+
+        return ordered_files

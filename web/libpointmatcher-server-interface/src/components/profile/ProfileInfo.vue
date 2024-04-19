@@ -2,7 +2,7 @@
     <div class="container mx-auto px-4 pt-8 pb-2">
       <h3 class="text-3xl font-bold text-center mb-4">Previous Evaluations</h3>
       
-      <Dataloader  @csv-data="loadCSVData"/>
+      <!--<Dataloader  @csv-data="loadCSVData"/>-->
   
       <div class="relative overflow-x-auto" style="min-height: 59vh;">
         <table class="table-fixed w-full text-center text-gray-500 shadow-md sm:rounded-lg">
@@ -22,7 +22,6 @@
   </template>
   
   <script>
-  import { getRuns } from '@/api';
   import PreviousEvaluation from './PreviousEvaluation.vue';
   import Dataloader from '../3d/Dataloader.vue';
 
