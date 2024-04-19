@@ -29,24 +29,26 @@
         <table class="table-fixed w-full text-center text-gray-500 shadow-md sm:rounded-lg">
           <thead class="text-sm text-gray-700 uppercase" style="background-color: #F1F1F1;">
             <tr>
-              <th scope="col" class="w-1/6 px-6 py-3">Date</th>
-              <th scope="col" class="w-1/6 px-6 py-3">Release version</th>
-              <th scope="col" class="w-1/4 px-6 py-3">Username</th>
-              <th scope="col" class="w-1/6 px-6 py-3">Score</th>
-              <th scope="col" class="w-1/6 px-6 py-3">Type</th>
+              <th scope="col" class="w-1/8 px-6 py-3">Date</th>
+              <th scope="col" class="w-1/8 px-6 py-3">Release version</th>
+              <th scope="col" class="w-1/4 px-6 py-3">User email</th>
+              <th scope="col" class="w-1/8 px-6 py-3">Rotation error</th>
+              <th scope="col" class="w-1/8 px-6 py-3">Translation error</th>
+              <th scope="col" class="w-1/8 px-6 py-3">Type</th>
             </tr>
           </thead>
           <tbody class="text-md">
             <tr v-for="(entry, index) in filteredLeaderboard" :key="index" class="leaderboard-row bg-white border-b">
               <td class="px-6 py-3.5">{{ formatDate(entry.date) }}</td>
-              <td class="px-6 py-3.5">{{ entry.version }}</td>
+              <td class="px-6 py-3.5">{{ entry.release_version }}</td>
               <td class="px-6 py-3.5">
-                <span :class="{'italic': !entry.username}">
-                  {{ entry.username || 'hidden username' }}
+                <span :class="{'italic': !entry.user_email}">
+                  {{ entry.user_email || 'hidden username' }}
                 </span>
               </td>
-              <td class="px-6 py-3.5">{{ formatScore(entry.score) }}</td>
-              <td class="px-6 py-3.5">{{ capitalizeFirstLetter(entry.score_type) }}</td>
+              <td class="px-6 py-3.5">{{ formatScore(entry.rotation_error) }}</td>
+              <td class="px-6 py-3.5">{{ formatScore(entry.translation_error) }}</td>
+              <td class="px-6 py-3.5">{{ capitalizeFirstLetter(entry.type) }}</td>
             </tr>
           </tbody>
         </table>

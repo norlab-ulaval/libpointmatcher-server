@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from leaderboard.leaderboard_entry import LeaderboardEntry, LeaderboardEntryOld
+from leaderboard.leaderboard_entry import LeaderboardEntry
 
 
 class Token(BaseModel):
@@ -30,6 +30,6 @@ class LeaderboardQuery(BaseModel):
 
 
 class Leaderboard:
-    def __init__(self, entries: list[LeaderboardEntryOld], total: int):
+    def __init__(self, entries: list[LeaderboardEntry], total: int):
         self.entries = entries
         self.total = total
