@@ -34,4 +34,4 @@ class LibpointmatcherAdapter(Evaluator):
                 results = websocket.recv()
                 return json.loads(results)
         except Exception as e:
-            reau
+            raise e
