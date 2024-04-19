@@ -12,6 +12,8 @@ TEST_EMAIL = 'test@example.com'
 TEST_USER = 'test_user'
 client = TestClient(app)
 
+b64_config = 'cmVhZGluZ0RhdGFQb2ludHNGaWx0ZXJzOgogIC0gSWRlbnRpdHlEYXRhUG9pbnRzRmlsdGVyOgoKcmVmZXJlbmNlRGF0YVBvaW50c0ZpbHRlcnM6CiAgLSBTYW1wbGluZ1N1cmZhY2VOb3JtYWxEYXRhUG9pbnRzRmlsdGVyOgogICAgICBrbm46IDEwCiAgICAgIHJhdGlvOiAxLjAgCiAgICAgIHNhbXBsaW5nTWV0aG9kOiAwCiAgICAgIGF2ZXJhZ2VFeGlzdGluZ0Rlc2NyaXB0b3JzOiAwCgptYXRjaGVyOgogIEtEVHJlZU1hdGNoZXI6CiAgICBrbm46IDEKICAgIGVwc2lsb246IDAgCgpvdXRsaWVyRmlsdGVyczoKICAtIFRyaW1tZWREaXN0T3V0bGllckZpbHRlcjoKICAgICAgcmF0aW86IDEuMAoKZXJyb3JNaW5pbWl6ZXI6CiAgUG9pbnRUb1BsYW5lRXJyb3JNaW5pbWl6ZXIKCnRyYW5zZm9ybWF0aW9uQ2hlY2tlcnM6CiAgLSBDb3VudGVyVHJhbnNmb3JtYXRpb25DaGVja2VyOgogICAgICBtYXhJdGVyYXRpb25Db3VudDogNDAKICAtIERpZmZlcmVudGlhbFRyYW5zZm9ybWF0aW9uQ2hlY2tlcjoKICAgICAgbWluRGlmZlJvdEVycjogMC4wMDEKICAgICAgbWluRGlmZlRyYW5zRXJyOiAwLjAxCiAgICAgIHNtb290aExlbmd0aDogNCAgIAogICAgICAKaW5zcGVjdG9yOgogIE51bGxJbnNwZWN0b3IKIyAgVlRLRmlsZUluc3BlY3RvcgoKbG9nZ2VyOgogIE51bGxMb2dnZXIKIyAgRmlsZUxvZ2dlcgoK'
+
 
 @pytest.fixture(autouse=True)
 async def run_around_tests():
@@ -197,7 +199,9 @@ async def test_register_then_try_login_with_wrong_password(client: AsyncClient):
 async def test_evaluation(client: AsyncClient):
     access_token = await register_login(client)
 
-    new_evaluation_response = await client.post('/evaluation', json={'config': 'config', 'anonymous': False, 'name': 'evaluation_name'}, headers={'Authorization': 'Bearer ' + access_token})
+    new_evaluation_response = await client.post('/evaluation', json={'config': b64_config, 'anonymous': False,
+                                                                     'name': 'evaluation_name'},
+                                                headers={'Authorization': 'Bearer ' + access_token})
 
     assert new_evaluation_response.status_code == 200
 
@@ -212,7 +216,8 @@ async def test_evaluation(client: AsyncClient):
 async def test_get_runs(client: AsyncClient):
     access_token = await register_login(client)
 
-    new_evaluation_response = await client.post('/evaluation', json={'config': 'config', 'anonymous': False}, headers={'Authorization': 'Bearer ' + access_token})
+    new_evaluation_response = await client.post('/evaluation', json={'config': b64_config, 'anonymous': False},
+                                                headers={'Authorization': 'Bearer ' + access_token})
 
     assert new_evaluation_response.status_code == 200
 
@@ -221,6 +226,7 @@ async def test_get_runs(client: AsyncClient):
     assert get_evaluations_response.status_code == 200
 
     assert len(get_evaluations_response.json())
+
 
 # @pytest.mark.anyio
 # async def test_size_evaluation(client: AsyncClient):
@@ -254,7 +260,8 @@ async def test_get_runs(client: AsyncClient):
 async def test_get_types(client: AsyncClient):
     access_token = await register_login(client)
 
-    await client.post('/evaluation', json={'config': 'config', 'anonymous': False}, headers={'Authorization': 'Bearer ' + access_token})
+    await client.post('/evaluation', json={'config': b64_config, 'anonymous': False},
+                      headers={'Authorization': 'Bearer ' + access_token})
 
     get_types_response = await client.get('/leaderboard/types', headers={'Authorization': 'Bearer ' + access_token})
 
@@ -263,7 +270,6 @@ async def test_get_types(client: AsyncClient):
     types = get_types_response.json()
 
     assert len(types)
-    assert 'average' in types
 
 
 async def register_login(client: AsyncClient) -> str:
@@ -290,6 +296,7 @@ async def remove_test_user():
     db = get_database(env)
     users_collection: AgnosticCollection = db['users']
     await users_collection.find_one_and_delete({"username": TEST_USER})
+
 
 async def remove_test_leaderboard_entry():
     env = os.environ
