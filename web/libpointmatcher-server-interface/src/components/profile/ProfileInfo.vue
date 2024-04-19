@@ -1,14 +1,11 @@
 <template>
     <div class="container mx-auto px-4 pt-8 pb-2">
-      <h3 class="text-3xl font-bold text-center mb-4">Previous Evaluations</h3>
-      
-      <!--<Dataloader  @csv-data="loadCSVData"/>-->
-  
+      <h3 class="text-3xl font-bold text-center mb-4">Previous Evaluations</h3>    
       <div class="relative overflow-x-auto" style="min-height: 59vh;">
         <table class="table-fixed w-full text-center text-gray-500 shadow-md sm:rounded-lg">
           <tbody v-if="evaluationEntries" class="text-md">
             <tr v-for="(entry, index) in evaluationEntries" :key="index" class="leaderboard-row bg-white border-b">
-              <PreviousEvaluation :runs="entry" :csvData="csvData"/>
+              <PreviousEvaluation :runs="entry"/>
             </tr>
           </tbody>
           <tbody v-else>
@@ -23,18 +20,15 @@
   
   <script>
   import PreviousEvaluation from './PreviousEvaluation.vue';
-  import Dataloader from '../3d/Dataloader.vue';
 
   export default {
     name: 'LeaderboardTable',
     components: {
-      PreviousEvaluation,
-      Dataloader
+      PreviousEvaluation,  
     },
     data() {
       return {
         evaluationEntries: null,
-        csvData: [],
       };
     },
     async created() {
@@ -50,7 +44,7 @@
           console.error(response.error);
         }*/
 
-        
+        // Dummy data
         this.evaluationEntries = {
           "123": [
             {
@@ -302,22 +296,7 @@
               "anonymous": false,
             },        
           ],
-        }
-
-        console.log("Inspecting...");
-        console.log(this.evaluationEntries);
-      },
-      loadCSVData(data) {
-        this.csvData = data;
-      },
-      formatDate(dateString) {
-        return dateString.split('T')[0];
-      },
-      capitalizeFirstLetter(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-      },
-      formatScore(score) {
-        return (score * 100).toFixed(2);
+        }      
       },
     },
   };

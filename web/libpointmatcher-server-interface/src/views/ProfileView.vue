@@ -11,7 +11,7 @@ export default {
         ProfileInfo
     },
     async mounted() {
-        console.log("loading files...")
+        console.log("loading files...(ajouter un toast ici probablement)")
         await loadFiles();
         console.log("files loaded")
     }

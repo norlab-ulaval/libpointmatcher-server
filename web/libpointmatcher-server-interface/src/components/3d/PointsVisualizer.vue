@@ -1,14 +1,12 @@
 <template>
   <div>
-    <div v-on:mouseenter="entering" v-on:mouseleave="leaving" v-on:mousemove="tryUpdateRender" ref="visualizer"></div>
-    <!--<button v-if="!addedPoints" @click="applyTransform">Add more points</button>-->
+    <div v-on:mouseenter="entering" v-on:mouseleave="leaving" v-on:mousemove="tryUpdateRender" ref="visualizer"></div>    
   </div>
 </template>
 
 <script>
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import Dataloader from '@/components/3d/Dataloader.vue';
 
 export default {
   name: 'ThreeJSPoints',
@@ -18,7 +16,6 @@ export default {
       controls: null,
       holding: false,
       over: false,
-      addedPoints: false,
     };
   },
   props: {
@@ -39,10 +36,7 @@ export default {
       required: false,
       default: [],
     }
-  },
-  components: {
-    Dataloader,
-  },
+  },  
   methods: {    
     initThree() {    
       //Initialisation de la scène, de la caméra et du rendu  
@@ -91,9 +85,7 @@ export default {
       this.renderer.render(this.scene, this.camera);
       this.controls.update();
     },
-    applyTransform() {
-      console.log("Applying transform with...")
-      console.log(this.transform)
+    applyTransform() {      
       this.pointsData.forEach((point) => {
         const x = (point.x * this.transform[0][0]) + (point.y * this.transform[0][1]) + (point.z * this.transform[0][2]) +  this.transform[0][3];
         const y = (point.x * this.transform[1][0]) + (point.y * this.transform[1][1]) + (point.z * this.transform[1][2]) +  this.transform[1][3];
@@ -106,7 +98,6 @@ export default {
       });
 
       this.renderPoints(0x3884ff);
-      this.addedPoints = true;
     },
     entering() {
       this.over = true;
@@ -150,14 +141,7 @@ export default {
     data: function() {
       this.pointsData = JSON.parse(JSON.stringify(this.data));
       this.renderPoints();
-    },
-    transform(newTransform, oldTransform) {
-      console.log("Transform changed to....")
-      console.log(this.transform)
-      if(newTransform != []) {
-        this.applyTransform()
-      }
-    }
+    },    
   },
 };
 </script>

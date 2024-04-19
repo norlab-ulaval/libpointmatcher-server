@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div :class="this.headerClass">
+        <div :class="[this.collapsed ? 'rounded-md': 'rounded-t-md', 'mx-auto px-4 py-2 border-2 border-black']">
             <div class="flex mx-auto px-4 py-2">
                 <button type="button" @click="toggleCollapsed" value="Show evaluation">
                     <i v-if="collapsed">
@@ -23,23 +23,33 @@
         <div v-if="!collapsed" class="border-x-2 border-b-2 border-black rounded-b-md">
           <div class="flex mx-auto px-4 py-2">   
               <div>
-                <select class="border-2 border-gray-300 bg-white h-10 rounded-lg text-gray-700 w-44 text-center" v-model="selectedRun">
-                  <option value="" disabled>Score type</option>         
-                  <option v-for="run in getOrderedRuns()" :value="run">{{ getFormattedRunName(run) }}</option>                              
-                </select>  
-                
-                Iterations
-                <select v-if="selectedRun" class="border-2 border-gray-300 bg-white h-10 rounded-lg text-gray-700 w-44 text-center" v-model="selectedIteration">
-                  <option value="" disabled>Run</option>         
-                  <option v-for="(iteration, index) in selectedRun.iterations" :value="index">{{ index }}</option>
-                </select>                
+                <div class="flex justify-between">
+                  <div class="flex me-2 pe-2 py-2">
+                    <p class="flex me-2 my-auto">
+                      Score :
+                    </p>
+                    <select class="border-2 border-gray-300 bg-white h-10 rounded-lg text-gray-700 w-44 text-center" v-model="selectedRun">
+                      <option value="" disabled selected hidden>Select Score...</option>                             
+                      <option v-for="run in getOrderedRuns()" :value="run">{{ getFormattedRunName(run) }}</option>                              
+                    </select>  
+                  </div>
+                  
+                  <div v-if="selectedRun" class="flex ms-2 ps-2 py-2">
+                    <p class="flex me-2 my-auto">
+                      Iterations :
+                    </p> 
+                    <select class="border-2 border-gray-300 bg-white h-10 rounded-lg text-gray-700 w-44 text-center" v-model="selectedIteration">
+                      <option value="" disabled selected hidden>Select Iteration...</option>          
+                      <option v-for="(iteration, index) in selectedRun.iterations" :value="index">{{ index }}</option>
+                    </select>                
+                  </div>
+                </div>
                 <div v-if="getBothSelected()">                          
                   <PointsVisualizer :width="600" :height="400" :data="getSelectedData()" :transform="getSelectedIteration().transformation" />
                 </div>
                 <div v-else>
-                  <PointsVisualizer :width="600" :height="400" :data="csvData" />
-                </div>
-                
+                  <PointsVisualizer :width="600" :height="400" :data="[]" />
+                </div>                
               </div>
               
               <div class="grow justify-center" v-if="getBothSelected()">
@@ -66,11 +76,7 @@ export default {
     runs: {
       type: Object,
       required: true,
-    },
-    csvData: {
-      type: Array,
-      required: true,
-    },
+    },  
   },
   data() {
     return {
@@ -81,27 +87,9 @@ export default {
     };
   },
   async created() {
-    //await this.fetchData();
-    console.log("Evalutation in sub-componenent...");
-    console.log(this.runs)
     this.singleRun = this.runs[0];  
   },
-  mounted() {
-    //console.log("Evalutation in sub-componenent...");
-    //console.log(this.runs);
-    console.log("Mounted")
-    
-
-  },
   methods: {
-    async fetchData() {
-      /*const response = await getEvaluations();
-      if (response.success) {
-        this.evaluations = response.evaluations;
-      } else {
-        console.error(response.error);
-      }*/
-    },
     toggleCollapsed() {
       this.collapsed = !this.collapsed;
     },
@@ -115,10 +103,9 @@ export default {
       return string.charAt(0).toUpperCase() + string.slice(1);
     },
     formatScore(score) {
-      return (score * 100).toFixed(2);
+      return ((1-score) * 100).toFixed(2);
     },
-    getOrderedRuns() {
-      console.log("getting ordered runs...")
+    getOrderedRuns() {  
       return this.runs.sort((a, b) => a.type.localeCompare(b.type));
     },
     getFormattedRunName(run) {
@@ -128,40 +115,16 @@ export default {
       return this.selectedRun != null && this.selectedIteration != null;
     },
     getSelectedIteration() {
-      console.log("Getting selected transformation...")
-      console.log("Selected run")
-      console.log(this.selectedRun)
-      console.log("Selected iteration")
-      console.log(this.selectedIteration)
-      console.log("Selected iteration in run")
-      console.log(this.selectedRun.iterations[this.selectedIteration])
-      console.log("Transformation")
-      console.log(this.selectedRun.iterations[this.selectedIteration].transformation)
-
       return this.selectedRun.iterations[this.selectedIteration];
     },
     getSelectedData() {
       return files[this.selectedRun.type][this.selectedRun.file_name]
     }
-  },
-  computed: {
-    headerClass() {
-      if (this.collapsed) {
-        return 'mx-auto px-4 py-2 border-2 border-black rounded-md';
-      }
-      return 'mx-auto px-4 py-2 border-2 border-black rounded-t-md';
-    },
-  },
+  },  
   watch: {
-    selectedRun: function() {
-      console.log("Selected run changed")
-      console.log(this.selectedRun)
+    selectedRun: function() {      
       this.selectedIteration = null;
-    },
-    selectedIteration: function() {
-      console.log("Selected iteration changed")
-      console.log(this.selectedIteration)
-    }
+    },    
   },
 };
 </script>
