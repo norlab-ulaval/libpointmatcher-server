@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Dataloader @csv-data="loadPointsData"/>
     <div v-on:mouseenter="entering" v-on:mouseleave="leaving" v-on:mousemove="tryUpdateRender" ref="visualizer"></div>
+    <button v-if="!addedPoints" @click="applyTransform">Add more points</button>
   </div>
 </template>
 
@@ -18,25 +18,39 @@ export default {
       controls: null,
       holding: false,
       over: false,
+      addedPoints: false,
     };
+  },
+  props: {
+    width: {
+      type: Number,
+      required: true,
+    },
+    height: {
+      type: Number,
+      required: true,
+    },
+    data: {
+      type: Array,
+      required: true,
+    },
+    transform: {
+      type: Array,
+      required: false,
+      default: [],
+    }
   },
   components: {
     Dataloader,
   },
-  methods: {
-    async loadPointsData(data) {
-      if (data != undefined && data != null) {
-        this.pointsData = data;
-        this.initThree();
-      }
-    },
+  methods: {    
     initThree() {    
       //Initialisation de la scène, de la caméra et du rendu  
       this.scene = new THREE.Scene();
-      this.camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 6000);
+      this.camera = new THREE.PerspectiveCamera(70, this.width / this.height, 1, 6000);
       this.camera.up.set( 0, 0, 1 );
       this.renderer = new THREE.WebGLRenderer();
-      this.renderer.setSize(window.innerWidth, window.innerHeight);
+      this.renderer.setSize(this.width, this.height);
       this.$refs.visualizer.appendChild(this.renderer.domElement);
       
       //Initialisation des contrôles
@@ -50,8 +64,8 @@ export default {
 
       this.camera.position.z = 5;
     },
-    renderPoints() {    
-      const material = new THREE.PointsMaterial({ color: 0xff0000, size: 0.1 });
+    renderPoints(color = 0xff0000) {    
+      const material = new THREE.PointsMaterial({ color: color, size: 0.1 });
       const geometry = new THREE.BufferGeometry();
       
       const positions = new Float32Array(this.pointsData.length * 3);
@@ -71,11 +85,28 @@ export default {
       this.updateRender();
     },
     updateRender() {
-      this.camera.aspect = window.innerWidth / window.innerHeight;
+      this.camera.aspect = this.width / this.height;
       this.camera.updateProjectionMatrix();
-      this.renderer.setSize(window.innerWidth, window.innerHeight);
+      this.renderer.setSize(this.width, this.height);
       this.renderer.render(this.scene, this.camera);
       this.controls.update();
+    },
+    applyTransform() {
+      console.log("Applying transform with...")
+      console.log(this.transform)
+      this.pointsData.forEach((point) => {
+        const x = (point.x * this.transform[0][0]) + (point.y * this.transform[0][1]) + (point.z * this.transform[0][2]) +  this.transform[0][3];
+        const y = (point.x * this.transform[1][0]) + (point.y * this.transform[1][1]) + (point.z * this.transform[1][2]) +  this.transform[1][3];
+        const z = (point.x * this.transform[2][0]) + (point.y * this.transform[2][1]) + (point.z * this.transform[2][2]) +  this.transform[2][3];
+        const w = (point.x * this.transform[3][0]) + (point.y * this.transform[3][1]) + (point.z * this.transform[3][2]) +  this.transform[3][3];
+
+        point.x = x/w;
+        point.y = y/w;
+        point.z = z/w;
+      });
+
+      this.renderPoints(0x3884ff);
+      this.addedPoints = true;
     },
     entering() {
       this.over = true;
@@ -107,6 +138,25 @@ export default {
     window.addEventListener('wheel', () => {
       this.overUpdateRender();
     });
+
+    if (this.data != undefined && this.data != null) {
+      this.pointsData = JSON.parse(JSON.stringify(this.data));
+      this.initThree();
+      this.updateRender();
+    }
+  },
+  watch: {
+    data: function() {
+      this.pointsData = JSON.parse(JSON.stringify(this.data));
+      this.renderPoints();
+    },
+    transform(newTransform, oldTransform) {
+      console.log("Transform changed to....")
+      console.log(this.transform)
+      if(newTransform != []) {
+        this.applyTransform()
+      }
+    }
   },
 };
 </script>
