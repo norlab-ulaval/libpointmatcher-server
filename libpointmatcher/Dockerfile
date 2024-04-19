@@ -26,8 +26,7 @@ RUN virtualenv venv \
     	pytest \
     	wheel \
         websockets \
-		scipy \
-		pypointmatcher
+		scipy
     
 # Modify the PATH environment variable to include the virtual environment's bin directory.
 ENV PATH="/venv/bin:$PATH"
