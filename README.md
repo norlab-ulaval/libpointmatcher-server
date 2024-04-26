@@ -13,6 +13,17 @@ Note:
 
 It is recommended to use [docker](https://www.docker.com/), you can use the [documentation](https://docs.docker.com/desktop/) to install it.
 
+
+## Building the libpointmatcher image
+The image needs to be pre-built since it takes some time.
+The dockerfile script is located in the libpointmatcher folder.
+The dockerfile script pulls directly from the Github repository unsing this branch :
+
+`agagnon/project/server-eval`
+
+In the future, this will be changed to an official image.
+
+## Commands
 To start use the command : 
 ```
 docker compose up -d
