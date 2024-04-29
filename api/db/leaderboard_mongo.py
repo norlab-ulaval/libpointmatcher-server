@@ -110,7 +110,9 @@ class LeaderboardMongo(LeaderboardRepo, NewEvaluationListener):
                                          date = evaluation.date,
                                          release_version = "demo")
 
-                doc = await self.collection.find_one({'file_name': entry.file_name, 'type': entry.type},
+                doc = await self.collection.find_one({ 'file_name': entry.file_name,
+                                                            'type': entry.type,
+                                                            'user_email': entry.user_email},
                                                      {'rotation_error': 1, 'translation_error': 1})
 
                 if doc:
@@ -119,5 +121,5 @@ class LeaderboardMongo(LeaderboardRepo, NewEvaluationListener):
                     if doc['translation_error'] < entry.translation_error:
                         entry.translation_error = doc['translation_error']
 
-                await self.collection.replace_one({'file_name': entry.file_name, 'type': entry.type},
+                await self.collection.replace_one({'file_name': entry.file_name, 'type': entry.type, 'user_email': entry.user_email},
                                                   _to_json(entry), True)
