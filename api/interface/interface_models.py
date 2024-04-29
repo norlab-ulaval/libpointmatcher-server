@@ -29,7 +29,6 @@ class LeaderboardQuery(BaseModel):
     type: str = "all"
 
 
-class Leaderboard:
-    def __init__(self, entries: list[LeaderboardEntry], total: int):
-        self.entries = entries
-        self.total = total
+class Leaderboard(BaseModel):
+    entries: list[LeaderboardEntry]
+    total: int

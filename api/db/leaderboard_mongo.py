@@ -19,8 +19,13 @@ def _to_json(entry: LeaderboardEntry):
 
 
 def _from_json(json):
-    return LeaderboardEntry(json['file_name'], json['type'], json['user_email'], json['rotation_error'],
-                            json['translation_error'], json['date'], json['release_version'])
+    return LeaderboardEntry(file_name = json['file_name'],
+                            type = json['type'],
+                            user_email = json['user_email'],
+                            rotation_error = json['rotation_error'],
+                            translation_error = json['translation_error'],
+                            date = json['date'],
+                            release_version = json['release_version'])
 
 
 class LeaderboardMongo(LeaderboardRepo, NewEvaluationListener):
@@ -97,8 +102,13 @@ class LeaderboardMongo(LeaderboardRepo, NewEvaluationListener):
                 rotation_error = rotation_error / len(evaluation.iterations)
                 translation_error = translation_error / len(evaluation.iterations)
 
-                entry = LeaderboardEntry(evaluation.file_name, evaluation.type, evaluation.user_email,
-                                         rotation_error, translation_error, evaluation.date, "demo")
+                entry = LeaderboardEntry(file_name = evaluation.file_name,
+                                         type = evaluation.type,
+                                         user_email = evaluation.user_email,
+                                         rotation_error = rotation_error,
+                                         translation_error = translation_error,
+                                         date = evaluation.date,
+                                         release_version = "demo")
 
                 doc = await self.collection.find_one({'file_name': entry.file_name, 'type': entry.type},
                                                      {'rotation_error': 1, 'translation_error': 1})
