@@ -144,3 +144,52 @@ export const transferFile = async (configBase64, anonymousBool) => {
     return { success: false, error: "Network error or server is unreachable."};
   }
 }
+
+export const getRuns = async () => {
+  const token = Cookies.get("token");
+
+  try {
+    const request = new Request(`${endpoint}/run`, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+
+    const response = await fetch(request);
+    const jsonResponse = await response.json();
+
+    if (!response.ok) {
+      throw new Error(jsonResponse.detail || "Failed to get evaluations. Please try again.");
+    }
+
+    return { success: true, runs: jsonResponse };
+  } catch (error) {
+    return { success: false, error: "Network error or server is unreachable."};
+  }
+}
+
+export const getFiles = async () => {
+  try {
+    const request = new Request(`${endpoint}/files`, {
+      method: "GET",
+      headers: {
+        "content-type": "application/json"
+      },
+    });
+
+    const response = await fetch(request);
+    const jsonResponse = await response.json();
+
+    if (!response.ok) {
+      throw new Error(jsonResponse.detail || "Failed to get evaluations. Please try again.");
+    }
+
+    console.log("Received files...")
+    console.log(jsonResponse)
+
+    return { success: true, files: jsonResponse };
+  } catch (error) {
+    return { success: false, error: "Network error or server is unreachable."};
+  }
+}

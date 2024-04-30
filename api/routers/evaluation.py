@@ -30,3 +30,7 @@ async def get_runs(user: Annotated[User, Depends(get_authorized_user)]):
 @router.post("/evaluation")
 async def new_evaluation(evaluation: NewEvaluation, user: Annotated[User, Depends(get_authorized_user)]):
     return await evaluation_controller.evaluate_config(user, evaluation.config, evaluation.anonymous, evaluation.name)
+
+@router.get("/files")
+async def get_files():
+    return evaluation_controller.get_files()
