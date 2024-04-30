@@ -50,31 +50,18 @@ class EvaluationController:
         await self.new_evaluation_listener.notify_batch(new_evaluations)
 
     async def get_evaluations(self, user: User):
+        return await self.evaluation_repo.fetch_history_from_email(user.email)
+
+    async def get_evaluations_grouped_by_run_id(self, user: User) -> dict[str, list[Evaluation]]:
         evaluations = await self.evaluation_repo.fetch_history_from_email(user.email)
 
-        return self.evaluation_old_convert(evaluations)
-
-    async def get_evaluations_grouped_by_run_id(self, user: User) -> dict[str, list[EvaluationOld]]:
-        evaluations = await self.evaluation_repo.fetch_history_from_email(user.email)
-
-        evaluations = self.evaluation_old_convert(evaluations)
-
-        groups: dict[str, list[EvaluationOld]] = {}
+        groups: dict[str, list[Evaluation]] = {}
         for evaluation in evaluations:
             if evaluation.run_id not in groups.keys():
                 groups[evaluation.run_id] = []
             groups[evaluation.run_id].append(evaluation)
 
         return groups
-
-    def evaluation_old_convert(self, evaluations: list[Evaluation]) -> list[EvaluationOld]:
-        evaluations_old = []
-
-        for e in evaluations:
-            evaluations_old.append(EvaluationOld(e.run_id, e.user_email, e.type, e.iterations[0].rotation_error,
-                                                 e.date, e.anonymous, e.evaluation_name))
-
-        return evaluations_old
     
     def get_files(self):
         filepath = "/app/data/"

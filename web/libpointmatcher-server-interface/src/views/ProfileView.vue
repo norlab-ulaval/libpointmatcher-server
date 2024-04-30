@@ -1,5 +1,5 @@
 <template>
-    <ProfileInfo />
+    <ProfileInfo :loading-data="loadingData" />
 </template>
 
 <script>
@@ -10,10 +10,15 @@ export default {
     components: {
         ProfileInfo
     },
+    data() {
+      return {
+        loadingData: false,
+      };
+    },
     async mounted() {
-        console.log("loading files...(ajouter un toast ici probablement)")
+        this.loadingData = true;
         await loadFiles();
-        console.log("files loaded")
+        this.loadingData = false;
     }
 }
 </script>
