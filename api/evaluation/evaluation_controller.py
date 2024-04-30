@@ -3,7 +3,7 @@ import os
 import csv
 from datetime import datetime
 
-from evaluation.evaluation import EvaluationOld, Evaluation, Iteration
+from evaluation.evaluation import Evaluation, Iteration
 from evaluation.evaluation_repo import EvaluationRepo
 from evaluation.evaluator import Evaluator
 from evaluation.new_evaluation_listener import NewEvaluationListener
