@@ -49,25 +49,42 @@
     </nav>
 </template>
   
-  <script>
+  <script setup>
+  import { onMounted } from 'vue';
+  import { watchEffect } from 'vue';
   import { logout } from '@/api';
   import { authStore } from '@/stores/authStore';
+  import { ref } from 'vue';
 
-  const { isLoggedIn } = authStore;
+  const isLoggedIn = ref(false);
 
-  export default {
-    name: 'Navbar',
-    methods: {
-        async handleLogout() {
-            const result = await logout();
-            if (result.success) {
-                this.$router.push('/');
-            } else {
-                console.error(result.error);
-            }
+    const handleLogout = async () => {
+        const result = await logout();
+        if (result.success) {
+            this.$router.push('/');
+        } else {
+            console.error(result.error);
         }
     }
-  };
+//   export default {
+//     name: 'Navbar',
+//     methods: {
+//         async handleLogout() {
+//             const result = await logout();
+//             if (result.success) {
+//                 this.$router.push('/');
+//             } else {
+//                 console.error(result.error);
+//             }
+//         }
+//     }
+//   };
+    onMounted(() => {
+        authStore.checkAuth();
+    });
+    watchEffect(() => {
+        console.log('Is logged in:', isLoggedIn);
+    });
   </script>
 
 <style>

@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from jose import jwt, JWTError
 from interface.interface_models import User
 
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
 SECRET_KEY = "faudrait générer une clé"
 ALGORITHM = "HS256"
 

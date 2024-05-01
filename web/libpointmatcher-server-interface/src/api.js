@@ -26,6 +26,7 @@ export const register = async (name, email, password) => {
 
 
 export const login = async (email, password) => {
+  console.log("Token on login:", Cookies.get('token'));
   const formData = new FormData();
   formData.append("username", email);
   formData.append("password", password);
@@ -42,7 +43,8 @@ export const login = async (email, password) => {
       throw new Error(jsonResponse.detail || "Login failed");
     } 
 
-    authStore.logout(jsonResponse.access_token);
+    authStore.login(jsonResponse.access_token);
+    console.log(authStore.checkAuth())
     return { success: true };
   } catch (error) {
     return { success: false, error: error.message };
@@ -76,7 +78,7 @@ export const logout = async () => {
 
 export const getLeaderboard = async (page, limit, type) => {
   const token = Cookies.get("token");
-  
+  console.log("Token on leaderboard:", Cookies.get('token'));
   try {
     const request = new Request(`${endpoint}/leaderboard?page=${page}&limit=${limit}&type=${type}`, {
       method: "GET",

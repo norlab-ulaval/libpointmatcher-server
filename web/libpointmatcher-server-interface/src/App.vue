@@ -10,13 +10,17 @@
 
 <script>
 import Navbar from '@/components/layout/Navbar.vue';
-import Footer from '@/components/layout/Footer.vue'
+import Footer from '@/components/layout/Footer.vue';
+import Cookies from 'js-cookie';
 
 export default {
   name: "app",
   components: {
     Navbar,
     Footer,
-  }
+  },
+  // created() {
+  //   Cookies.remove('token');
+  // }
 };
 </script>
