@@ -1,5 +1,6 @@
 import Cookies from 'js-cookie'
-import { authStore } from '@/stores/authStore';
+import { useAuthStore } from '@/stores/authStore';
+import router from './router'
 const endpoint = import.meta.env.VITE_API_URI;
 
 export const register = async (name, email, password) => {
@@ -40,7 +41,7 @@ export const login = async (email, password) => {
     const jsonResponse = await response.json();
     console.log("response")
     console.log(jsonResponse)
-    
+
     if (!response.ok) {
       throw new Error(jsonResponse.detail || "Login failed");
     } 
@@ -55,20 +56,12 @@ export const logout = async () => {
   const token = Cookies.get("token");
   
   try {
-    const request = new Request(`${endpoint}/logout`, {
+    const jsonResponse = await fetchWithAuth(`${endpoint}/logout`, {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${token}`,
       },
     });
-
-    const response = await fetch(request);
-    const jsonResponse = await response.json();
-
-    if (!response.ok) {
-      throw new Error(jsonResponse.detail || "Failed to logout.");
-    }
-
     return { success: true };
   } catch (error) {
     return { success: false, error: "Network error or server is unreachable." };
@@ -76,8 +69,7 @@ export const logout = async () => {
 };
 
 export const getLeaderboard = async (page, limit, type) => {
-  const token = Cookies.get("token");
-  console.log("Token on leaderboard:", Cookies.get('token'));
+
   try {
     const request = new Request(`${endpoint}/leaderboard?page=${page}&limit=${limit}&type=${type}`, {
       method: "GET",
@@ -124,7 +116,7 @@ export const transferFile = async (configBase64, anonymousBool) => {
   const token = Cookies.get("token");
 
   try {
-    const request = new Request(`${endpoint}/evaluation`, {
+    const jsonResponse = await fetchWithAuth(`${endpoint}/evaluation`, {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -132,13 +124,6 @@ export const transferFile = async (configBase64, anonymousBool) => {
       },
       body: JSON.stringify({ config: configBase64, anonymous: anonymousBool })
     });
-
-    const response = await fetch(request);
-    const jsonResponse = await response.json();
-
-    if (!response.ok) {
-      throw new Error(jsonResponse.detail || "Failed to evaluate. Please try again.");
-    }
 
     return { success: true };
   } catch (error) {
@@ -150,19 +135,12 @@ export const getRuns = async () => {
   const token = Cookies.get("token");
 
   try {
-    const request = new Request(`${endpoint}/run`, {
+    const jsonResponse = await fetchWithAuth(`${endpoint}/run`, {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${token}`,
       },
     });
-
-    const response = await fetch(request);
-    const jsonResponse = await response.json();
-
-    if (!response.ok) {
-      throw new Error(jsonResponse.detail || "Failed to get evaluations. Please try again.");
-    }
 
     return { success: true, runs: jsonResponse };
   } catch (error) {
@@ -193,4 +171,22 @@ export const getFiles = async () => {
   } catch (error) {
     return { success: false, error: "Network error or server is unreachable."};
   }
+}
+
+async function fetchWithAuth(url, options) {
+  const response = await fetch(url, options);
+  const jsonResponse = await response.json();
+
+  if (!response.ok) {
+    if (response.status === 401) {
+      console.log('401 interceptes')
+      const store = useAuthStore();
+      store.logout();
+      router.push({ name: 'auth'});
+    }
+    console.log('test')
+    throw new Error(jsonResponse.detail || jsonResponse.message || "An error occurred");
+  }
+
+  return jsonResponse;
 }
