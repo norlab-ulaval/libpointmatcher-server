@@ -14,18 +14,21 @@ def _to_json(entry: LeaderboardEntry):
         'rotation_error': entry.rotation_error,
         'translation_error': entry.translation_error,
         'date': entry.date,
-        'release_version': entry.release_version
+        'release_version': entry.release_version,
+        'anonymous': entry.anonymous
     }
 
 
 def _from_json(json):
+    print(json)
     return LeaderboardEntry(file_name = json['file_name'],
                             type = json['type'],
-                            user_email = json['user_email'],
+                            user_email = 'Anonymous' if json['anonymous'] else json['user_email'],
                             rotation_error = json['rotation_error'],
                             translation_error = json['translation_error'],
                             date = json['date'],
-                            release_version = json['release_version'])
+                            release_version = json['release_version'],
+                            anonymous = json['anonymous'])
 
 
 class LeaderboardMongo(LeaderboardRepo, NewEvaluationListener):
@@ -108,7 +111,8 @@ class LeaderboardMongo(LeaderboardRepo, NewEvaluationListener):
                                          rotation_error = rotation_error,
                                          translation_error = translation_error,
                                          date = evaluation.date,
-                                         release_version = "demo")
+                                         release_version = "demo",
+                                         anonymous = evaluation.anonymous)
 
                 doc = await self.collection.find_one({ 'file_name': entry.file_name,
                                                             'type': entry.type,
@@ -121,5 +125,7 @@ class LeaderboardMongo(LeaderboardRepo, NewEvaluationListener):
                     if doc['translation_error'] < entry.translation_error:
                         entry.translation_error = doc['translation_error']
 
-                await self.collection.replace_one({'file_name': entry.file_name, 'type': entry.type, 'user_email': entry.user_email},
-                                                  _to_json(entry), True)
+                await self.collection.replace_one({'file_name': entry.file_name,
+                                                    'type': entry.type,
+                                                    'user_email': entry.user_email},
+                                                    _to_json(entry), True)
