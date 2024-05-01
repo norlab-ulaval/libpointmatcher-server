@@ -112,7 +112,7 @@ export const getScoreTypes = async () => {
 };
 
 
-export const transferFile = async (configBase64, anonymousBool) => {
+export const transferFile = async (configBase64, anonymousBool, filename) => {
   const token = Cookies.get("token");
 
   try {
@@ -122,7 +122,7 @@ export const transferFile = async (configBase64, anonymousBool) => {
         "Authorization": `Bearer ${token}`,
         "content-type": "application/json"
       },
-      body: JSON.stringify({ config: configBase64, anonymous: anonymousBool })
+      body: JSON.stringify({ config: configBase64, anonymous: anonymousBool, name: filename})
     });
 
     return { success: true };
@@ -163,9 +163,6 @@ export const getFiles = async () => {
     if (!response.ok) {
       throw new Error(jsonResponse.detail || "Failed to get evaluations. Please try again.");
     }
-
-    console.log("Received files...")
-    console.log(jsonResponse)
 
     return { success: true, files: jsonResponse };
   } catch (error) {

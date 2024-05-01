@@ -10,3 +10,4 @@ class LeaderboardEntry(BaseModel):
     translation_error: float
     date: datetime
     release_version: str
+    anonymous: bool
