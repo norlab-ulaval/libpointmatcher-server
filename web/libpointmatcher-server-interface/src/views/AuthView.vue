@@ -11,6 +11,7 @@
   import SignUp from '../components/Auth/SignUp.vue';
   import ToastNotification from '../components/ui/ToastNotification.vue';
   import { register, login, logout } from '../api';
+  import { useAuthStore } from '@/stores/authStore';
   
   export default {
     components: {
@@ -49,6 +50,8 @@
         const response = await login(email, password);
         if (response.success) {
             this.loginErrorMessage = '';
+            const authStore = useAuthStore();
+            authStore.login(response.token);
             this.$router.push({ name: 'home'});
         } else {
             this.loginErrorMessage = response.error;

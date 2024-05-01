@@ -38,13 +38,14 @@ export const login = async (email, password) => {
     });
 
     const jsonResponse = await response.json();
-
+    console.log("response")
+    console.log(jsonResponse)
+    
     if (!response.ok) {
       throw new Error(jsonResponse.detail || "Login failed");
     } 
 
-    authStore.dispatch('login', jsonResponse.access_token);
-    return { success: true };
+    return { success: true, token: jsonResponse.access_token };
   } catch (error) {
     return { success: false, error: error.message };
   }
@@ -68,7 +69,6 @@ export const logout = async () => {
       throw new Error(jsonResponse.detail || "Failed to logout.");
     }
 
-    authStore.dispatch('logout');
     return { success: true };
   } catch (error) {
     return { success: false, error: "Network error or server is unreachable." };
