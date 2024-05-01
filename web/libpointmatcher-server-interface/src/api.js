@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie'
-
+import { authStore } from '@/stores/authStore';
 const endpoint = import.meta.env.VITE_API_URI;
 
 export const register = async (name, email, password) => {
@@ -42,7 +42,7 @@ export const login = async (email, password) => {
       throw new Error(jsonResponse.detail || "Login failed");
     } 
 
-    Cookies.set("token", jsonResponse.access_token, { expires: 1 }, { secure: true });
+    authStore.logout(jsonResponse.access_token);
     return { success: true };
   } catch (error) {
     return { success: false, error: error.message };
@@ -67,7 +67,7 @@ export const logout = async () => {
       throw new Error(jsonResponse.detail || "Failed to logout.");
     }
 
-    Cookies.remove("token");
+    authStore.logout();
     return { success: true };
   } catch (error) {
     return { success: false, error: "Network error or server is unreachable." };
