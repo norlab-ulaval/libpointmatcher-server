@@ -11,12 +11,13 @@
             <div class="flex items-center mr-auto ml-8">
                 <router-link
                     class="text-white border-b-2 border-transparent hover:border-white custom-text-size mr-8 pb-2 font-sans font-light"
-                    to="/home"
+                    to="/"
                     active-class="border-white"
                 >
                     Home
                 </router-link>
                 <router-link
+                    v-if="isLoggedIn"
                     class="text-white border-b-2 border-transparent hover:border-white custom-text-size mr-8 pb-2 font-sans font-light"
                     to="/uploads"
                     active-class="border-white"
@@ -24,6 +25,7 @@
                     Uploads
                 </router-link>
                 <router-link
+                    v-if="isLoggedIn"
                     class="text-white border-b-2 border-transparent hover:border-white custom-text-size pb-2 font-sans font-light"
                     to="/profile"
                     active-class="border-white"
@@ -33,7 +35,15 @@
             </div>
 
             <div class="pr-8">
-                <a class="text-white border-b-2 border-transparent hover:border-white custom-text-size font-sans pb-2 cursor-pointer font-light" @click="handleLogout">Log out</a>
+                <a v-if="isLoggedIn" class="text-white border-b-2 border-transparent hover:border-white custom-text-size font-sans pb-2 cursor-pointer font-light" @click="handleLogout">Log out</a>
+                <router-link
+                    v-if="!isLoggedIn"
+                    class="text-white border-b-2 border-transparent hover:border-white custom-text-size pb-2 font-sans font-light"
+                    to="/auth"
+                    active-class="border-white"
+                >
+                    Log in
+                </router-link>
             </div>
         </div>
     </nav>
@@ -41,6 +51,9 @@
   
   <script>
   import { logout } from '@/api';
+  import { authStore } from '@/stores/authStore';
+
+  const { isLoggedIn } = authStore;
 
   export default {
     name: 'Navbar',
