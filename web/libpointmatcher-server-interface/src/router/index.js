@@ -36,4 +36,26 @@ const router = createRouter({
   ]
 })
 
+router.beforeEach((to, from, next) => {
+  const token = Cookies.get('token');
+  if (token) {
+      try {
+          const decoded = jwtDecode(token);
+          const currentTime = Date.now() / 1000;
+          if (decoded.exp > currentTime) {
+              next();
+          } else {
+              next({ name: 'auth' });
+          }
+      } catch (error) {
+          console.error("Token decoding failed:", error);
+          next({ name: 'auth' });
+      }
+  } else if (to.name !== 'auth') {
+      next({ name: 'auth' });
+  } else {
+      next();
+  }
+});
+
 export default router
