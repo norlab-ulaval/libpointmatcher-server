@@ -43,8 +43,7 @@ export const login = async (email, password) => {
       throw new Error(jsonResponse.detail || "Login failed");
     } 
 
-    authStore.login(jsonResponse.access_token);
-    console.log(authStore.checkAuth())
+    authStore.dispatch('login', jsonResponse.access_token);
     return { success: true };
   } catch (error) {
     return { success: false, error: error.message };
@@ -69,7 +68,7 @@ export const logout = async () => {
       throw new Error(jsonResponse.detail || "Failed to logout.");
     }
 
-    authStore.logout();
+    authStore.dispatch('logout');
     return { success: true };
   } catch (error) {
     return { success: false, error: "Network error or server is unreachable." };
