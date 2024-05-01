@@ -129,7 +129,7 @@ export default {
     async convertAndTransferFile(file) {
       try {
         const base64Data = await this.readFileAsBase64(file);
-        transferFile(base64Data, document.getElementById('anonymous').checked);
+        transferFile(base64Data, document.getElementById('anonymous').checked, file.name);
         console.log(document.getElementById('anonymous').checked)
         
       } catch (error) {

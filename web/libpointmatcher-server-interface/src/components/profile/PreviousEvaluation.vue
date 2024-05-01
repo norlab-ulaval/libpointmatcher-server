@@ -29,7 +29,7 @@
                       Score :
                     </p>
                     <select class="border-2 border-gray-300 bg-white h-10 rounded-lg text-gray-700 w-44 text-center" v-model="selectedRun">
-                      <option value="" disabled selected hidden>Select Score...</option>                             
+                      <option :value="null" disabled selected hidden>Select Score...</option>                             
                       <option v-for="run in getOrderedRuns()" :value="run">{{ getFormattedRunName(run) }}</option>                              
                     </select>  
                   </div>
@@ -39,13 +39,13 @@
                       Iterations :
                     </p> 
                     <select class="border-2 border-gray-300 bg-white h-10 rounded-lg text-gray-700 w-44 text-center" v-model="selectedIteration">
-                      <option value="" disabled selected hidden>Select Iteration...</option>          
+                      <option :value="null" disabled selected hidden>Select Iteration...</option>          
                       <option v-for="(iteration, index) in selectedRun.iterations" :value="index">{{ index }}</option>
                     </select>                
                   </div>
                 </div>
                 <div v-if="getBothSelected()">                          
-                  <PointsVisualizer :width="600" :height="400" :data="getSelectedData()" :transform="getSelectedIteration().transformation" />
+                  <PointsVisualizer :width="600" :height="400" :data="getSelectedData()" :transform="getSelectedIteration().transformation" :key="this.selectedIteration" />
                 </div>
                 <div v-else>
                   <PointsVisualizer :width="600" :height="400" :data="[]" />
@@ -54,8 +54,8 @@
               
               <div class="grow justify-center" v-if="getBothSelected()">
                 <div class="flex flex-col h-full justify-center">
-                  <div>{{ "Rotation error : " + getSelectedIteration().rotation_error }}</div>
-                  <div>{{ "Translation error : " + getSelectedIteration().translation_error }}</div>
+                  <div>{{ "Rotation error : " + formatScore(getSelectedIteration().rotation_error) }}</div>
+                  <div>{{ "Translation error : " + formatScore(getSelectedIteration().translation_error) }}</div>
                 </div>
               </div>                         
           </div>
