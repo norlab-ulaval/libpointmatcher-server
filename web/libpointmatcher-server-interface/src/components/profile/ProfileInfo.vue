@@ -1,11 +1,13 @@
 <template>
     <div class="container mx-auto px-4 pt-8 pb-2">
-      <h3 class="text-3xl font-bold text-center mb-4">Previous Evaluations</h3>    
+      <h3 class="text-3xl font-bold text-center mb-4 dark:text-gray-100">Previous Evaluations</h3>    
       <div class="relative overflow-x-auto" style="min-height: 59vh;">
-        <table v-if="!this.loadingData" class="table-fixed w-full text-center text-gray-500 shadow-md sm:rounded-lg">
+        <table v-if="!this.loadingData" class="table-fixed w-full text-center text-gray-500 shadow-md sm:rounded-lg border-separate border-spacing-y-4">
           <tbody v-if="evaluationEntries" class="text-md">
-            <tr v-for="(entry, index) in evaluationEntries" :key="index" class="leaderboard-row bg-white border-b">
-              <PreviousEvaluation :runs="entry"/>
+            <tr v-for="(entry, index) in evaluationEntries" :key="index" class="leaderboard-row bg-white border-b rounded-lg overflow-hidden shadow dark:border-b-0">
+              <td class="dark:bg-neutral-800 dark:text-gray-100 overflow-hidden">
+                <PreviousEvaluation :runs="entry"/>
+              </td>
             </tr>
           </tbody>
           <tbody v-else>
@@ -16,7 +18,7 @@
         </table>
         <div v-else class="text-center">
             <SpinnerIcon></SpinnerIcon>
-            <div>Loading data...</div>
+            <div class="dark:text-gray-200">Loading data...</div>
         </div>
       </div>
     </div>

@@ -60,7 +60,7 @@
         const result = await logout();
         if (result.success) {
             authStore.logout();
-            this.$router.push('/');
+            this.$router.push('/auth');
         } else {
             console.error(result.error);
         }
