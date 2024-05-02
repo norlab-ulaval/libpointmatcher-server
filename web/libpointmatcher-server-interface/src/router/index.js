@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '../stores/authStore';
 import HomeView from '../views/HomeView.vue'
 import AuthView from '../views/AuthView.vue'
 import About from '../views/AboutView.vue'
@@ -26,36 +27,25 @@ const router = createRouter({
     {
       path: '/uploads',
       name: 'uploads',
-      component: Uploads
+      component: Uploads,
+      meta: { requiresAuth: true }
     },
     {
       path: '/profile',
       name: 'profile',
-      component: ProfileView
+      component: ProfileView,
+      meta: { requiresAuth: true }
     }
   ]
 })
 
-// router.beforeEach((to, from, next) => {
-//   const token = Cookies.get('token');
-//   if (token) {
-//       try {
-//           const decoded = jwtDecode(token);
-//           const currentTime = Date.now() / 1000;
-//           if (decoded.exp > currentTime) {
-//               next();
-//           } else {
-//               next({ name: 'auth' });
-//           }
-//       } catch (error) {
-//           console.error("Token decoding failed:", error);
-//           next({ name: 'auth' });
-//       }
-//   } else if (to.name !== 'auth') {
-//       next({ name: 'auth' });
-//   } else {
-//       next();
-//   }
-// });
+router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore();
+  if (to.matched.some(record => record.meta.requiresAuth) && !authStore.isLoggedIn) {
+    next({ path: '/auth' });
+  } else {
+    next();
+  }
+});
 
 export default router
