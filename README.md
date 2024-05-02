@@ -2,7 +2,7 @@
 
 Web app to test and rank the result of the configuration used for [libpointmatcher](https://github.com/norlab-ulaval/libpointmatcher)
 
-Note:
+Notes :
 - Javascript for the frontend
 - Python for the backend
 - Mongo for the database for users information
@@ -16,8 +16,8 @@ It is recommended to use [docker](https://www.docker.com/), you can use the [doc
 
 ## Building the libpointmatcher image
 The image needs to be pre-built since it takes some time.
-The dockerfile script is located in the libpointmatcher folder.
-The dockerfile script pulls directly from the Github repository unsing this branch :
+The dockerfile script is located in the [libpointmatcher folder](libpointmatcher/README.md).
+The dockerfile script pulls directly from the GitHub repository using this branch :
 
 `agagnon/project/server-eval`
 
