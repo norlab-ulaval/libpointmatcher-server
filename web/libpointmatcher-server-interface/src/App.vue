@@ -1,7 +1,7 @@
 <template>
-  <div id="app" class="flex flex-col h-screen">
+  <div id="app" class="flex flex-col h-screen ">
     <Navbar v-if="$route.name !== 'auth'" />
-    <main class="flex-grow w-full">
+    <main class="flex-grow w-full dark:bg-neutral-900">
       <router-view></router-view>
     </main>
     <Footer v-if="$route.name !== 'auth'" />

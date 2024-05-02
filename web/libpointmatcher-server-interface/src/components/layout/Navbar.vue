@@ -1,5 +1,5 @@
 <template>
-    <nav class="shadow w-full" style="background-color: #515151;">
+    <nav id="navbar" class="shadow w-full bg-gray-600 dark:bg-neutral-900">
         <div class="flex items-center justify-between px-10 py-2 mx-auto">
 
             <div class="pl-8">
@@ -69,7 +69,6 @@
         authStore.checkAuth();
     });
   </script>
-
 <style>
 .custom-text-size {
     font-size: 1.65rem;
