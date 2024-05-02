@@ -119,11 +119,16 @@ export default {
     },
     async runConfigurations() {
       this.isRunning = true;
-      for (const file of this.uploadedFiles) {
-        await this.convertAndTransferFile(file);
+      try {
+        for (const file of this.uploadedFiles) {
+          await this.convertAndTransferFile(file);
+        }
+        this.$router.push({ name: 'profile'});
+      } catch(error) {
+        console.error('Failed to process files:', error);
+      } finally {
+        this.isRunning = false;
       }
-      this.$router.push({ name: 'profile'});
-      this.isRunning = false;
     },
 
     async convertAndTransferFile(file) {
@@ -134,6 +139,7 @@ export default {
         
       } catch (error) {
         console.error('Error reading file:', error);
+        throw error;
       }
     },
 
