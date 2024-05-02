@@ -39,8 +39,6 @@ export const login = async (email, password) => {
     });
 
     const jsonResponse = await response.json();
-    console.log("response")
-    console.log(jsonResponse)
 
     if (!response.ok) {
       throw new Error(jsonResponse.detail || "Login failed");
@@ -77,8 +75,6 @@ export const getLeaderboard = async (page, limit, type) => {
 
     const response = await fetch(request);
     const jsonResponse = await response.json();
-    console.log("response")
-    console.log(jsonResponse)
 
     if (!response.ok) {
       throw new Error(jsonResponse.detail || "Failed to fetch leaderboard.");
