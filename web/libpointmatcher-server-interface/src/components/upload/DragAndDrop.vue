@@ -125,6 +125,7 @@ export default {
         }
         this.$router.push({ name: 'profile'});
       } catch(error) {
+        this.displayToast(`Failed to process files`);
         console.error('Failed to process files:', error);
       } finally {
         this.isRunning = false;
@@ -138,6 +139,7 @@ export default {
         console.log(document.getElementById('anonymous').checked)
         
       } catch (error) {
+        this.displayToast(`Failed to process files`);
         console.error('Error reading file:', error);
         throw error;
       }
