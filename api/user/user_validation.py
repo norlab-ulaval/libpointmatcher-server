@@ -6,7 +6,7 @@ email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
 # Username pattern : at least 2 characters
 username_pattern = r'.{2,}'
 # Password pattern : 8 characters at least, numbers, upper case and lower case letter, special character
-password_pattern = r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'
+password_pattern = r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!"#$%&\'\(\)*+,-./:;<=>?@[\]^_`{|}~])[A-Za-z\d!"#$%&\'\(\)*+,-./:;<=>?@[\]^_`{|}~]{8,}$'
     
 def validate_email(email):
     return re.match(email_pattern, email) is not None

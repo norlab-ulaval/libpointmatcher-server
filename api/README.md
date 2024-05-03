@@ -1,3 +1,7 @@
+## Notes
+
+This api is build in python, with the [FastAPI](https://fastapi.tiangolo.com/) framework.
+
 ## Run locally
 
 ### Move to the `/api` folder

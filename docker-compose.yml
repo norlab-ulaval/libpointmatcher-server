@@ -21,6 +21,8 @@ services:
         condition: service_healthy
       cache:
         condition: service_started
+      libpointmatcher:
+        condition: service_started
     env_file:
       - .env
     networks:
@@ -28,6 +30,8 @@ services:
     environment:
       MONGO_URI: "mongo:27017"
       REDIS_URI: "cache"
+    volumes:
+      - ./data:/app/data/:ro
 
   api:
    build:
@@ -41,6 +45,8 @@ services:
        condition: service_started
      test-api:
        condition: service_completed_successfully
+     libpointmatcher:
+       condition: service_started
    env_file:
      - .env
    networks:
@@ -48,6 +54,8 @@ services:
    environment:
      MONGO_URI: "mongo:27017"
      REDIS_URI: "cache"
+   volumes:
+     - ./data:/app/data/:ro
 
   mongo:
     image: mongo
@@ -64,6 +72,8 @@ services:
       MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
     networks:
       - internal
+    volumes:
+      - ./db/mongo:/data/db/
 
   mongo-express:
     image: mongo-express
@@ -76,7 +86,7 @@ services:
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_USERNAME}
       ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_PASSWORD}
-      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_PASSWORD}:${MONGO_PASSWORD}@mongo:27017/
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongo:27017/
     networks:
       - internal
 
@@ -90,6 +100,16 @@ services:
       - cache:/data
     networks:
       - internal
+
+  libpointmatcher:
+    image: libpointmatcher
+    command: 'evaluate_config_server.py --ws 8765 --config a --path /libraries/libpointmatcher/evaluations/demo/ --output a --seed 30'
+    ports:
+      - '8765:8765'
+    networks:
+      - internal
+    volumes:
+     - ./data:/libraries/libpointmatcher/evaluations/demo/
 
 networks:
   internal:

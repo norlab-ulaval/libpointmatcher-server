@@ -1,9 +1,13 @@
-<script setup>
-import TheWelcome from '../components/TheWelcome.vue'
-</script>
-
 <template>
-  <main>
-    <TheWelcome />
-  </main>
+  <LeaderboardTable />
 </template>
+
+<script>
+import LeaderboardTable from '../components/leaderboard/LeaderboardTable.vue';
+
+export default {
+  components: {
+        LeaderboardTable
+    },
+}
+</script>

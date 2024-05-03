@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="bg-gradient-to-t from-neutral-400 to-slate-50 dark:bg-neutral-900 dark:bg-none h-full">
         <ToastNotification :show="showToast" :message="toastMessage" />
         <SignIn @login-event="login_" :loginError="loginErrorMessage" v-if="!showSignUp" @toggle-signup="toggleSignUp" />
         <SignUp @signup-event="register_" :signUpError="signUpErrorMessage" v-else @back-to-signin="toggleSignUp" />
@@ -11,9 +11,9 @@
   import SignUp from '../components/Auth/SignUp.vue';
   import ToastNotification from '../components/ui/ToastNotification.vue';
   import { register, login, logout } from '../api';
+  import { useAuthStore } from '@/stores/authStore';
   
   export default {
-    name: "app",
     components: {
         ToastNotification,
         SignIn,
@@ -50,6 +50,8 @@
         const response = await login(email, password);
         if (response.success) {
             this.loginErrorMessage = '';
+            const authStore = useAuthStore();
+            authStore.login(response.token);
             this.$router.push({ name: 'home'});
         } else {
             this.loginErrorMessage = response.error;
@@ -76,12 +78,6 @@
   </script>
   
   <style>
-  body {
-    background: linear-gradient(to top, white, rgb(60 60 60 / 43%));
-    margin: 0;
-    height: 100%;
-    width: 100%;
-  }
   .fade-enter-active, .fade-leave-active {
     transition: opacity 0.5s;
   }
