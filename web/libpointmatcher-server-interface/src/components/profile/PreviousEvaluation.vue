@@ -103,7 +103,7 @@ export default {
       return string.charAt(0).toUpperCase() + string.slice(1);
     },
     formatScore(score) {
-      return ((1-score) * 100).toFixed(2);
+      return score.toFixed(2);
     },
     getOrderedRuns() {  
       return this.runs.sort((a, b) => a.type.localeCompare(b.type));
