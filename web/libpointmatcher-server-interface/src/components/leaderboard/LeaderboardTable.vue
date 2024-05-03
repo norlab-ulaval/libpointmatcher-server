@@ -1,7 +1,7 @@
 <template>
-    <div class="container mx-auto px-4 pt-8 pb-2">
-      <h1 class="text-3xl font-bold text-center mb-4">libpointmatcher Leaderboard</h1>
-      <p class="text-center mb-8">Discover the most effective configurations contributed by our community.</p>
+    <div class="container mx-auto px-4 pt-8 pb-2 ">
+      <h1 class="text-3xl font-bold text-center mb-4 dark:text-gray-100">libpointmatcher Leaderboard</h1>
+      <p class="text-center mb-8 dark:text-gray-200">Discover the most effective configurations contributed by our community.</p>
       
       <div class="flex justify-between mb-4">
         <div class="relative">
@@ -10,12 +10,12 @@
             </svg>
             <input
             type="text"
-            class="border-2 border-gray-300 bg-white h-10 pl-12 pr-5 rounded-lg text-sm focus:outline-none"
+            class="border-2 border-gray-300 bg-white h-10 pl-12 pr-5 rounded-lg text-sm focus:outline-none dark:bg-neutral-800 dark:text-gray-100 dark:border dark:border-gray-200"
             placeholder="Search..."
             v-model="searchQuery"
             />
         </div>
-        <select class="border-2 border-gray-300 bg-white h-10 rounded-lg text-gray-700 w-44 text-center" v-model="selectedType">
+        <select class="border-2 border-gray-300 bg-white h-10 rounded-lg text-gray-700 w-44 text-center dark:bg-neutral-800 dark:text-gray-100 dark:border dark:border-gray-200" v-model="selectedType">
           <option value="" disabled>Score type</option>         
           <option value="all">All</option>
           <option v-for="type in scoreTypes" :key="type" :value="type.toLowerCase()">
@@ -26,8 +26,8 @@
       
   
       <div class="relative overflow-x-auto" style="min-height: 59vh;">
-        <table class="table-fixed w-full text-center text-gray-500 shadow-md sm:rounded-lg">
-          <thead class="text-sm text-gray-700 uppercase" style="background-color: #F1F1F1;">
+        <table class="table-fixed w-full text-center text-gray-500 shadow-md sm:rounded-lg dark:border-neutral-800">
+          <thead class="text-sm text-gray-700 uppercase bg-gray-100 dark:bg-neutral-800 dark:text-gray-100 dark:text-base">
             <tr>
               <th scope="col" class="w-1/8 px-6 py-3">Date</th>
               <th scope="col" class="w-1/8 px-6 py-3">Release version</th>
@@ -38,7 +38,7 @@
             </tr>
           </thead>
           <tbody class="text-md">
-            <tr v-for="(entry, index) in filteredLeaderboard" :key="index" class="leaderboard-row bg-white border-b">
+            <tr v-for="(entry, index) in filteredLeaderboard" :key="index" class="leaderboard-row bg-white border-b dark:bg-neutral-900 dark:border-neutral-700 dark:text-gray-200 dark:border">
               <td class="px-6 py-3.5">{{ formatDate(entry.date) }}</td>
               <td class="px-6 py-3.5">{{ entry.release_version }}</td>
               <td class="px-6 py-3.5">
@@ -65,7 +65,7 @@
         <div class="flex items-center gap-x-1">
           <input
             type="text"
-            class="min-h-[38px] w-12 flex justify-center items-center border border-gray-200 text-gray-800 py-2 px-3 text-sm rounded-lg focus:outline-none"
+            class="min-h-[38px] w-12 flex justify-center items-center border border-gray-200 text-gray-800 py-2 px-3 text-sm rounded-lg focus:outline-none dark:bg-neutral-800 dark:text-gray-200"
             v-model="inputPage"
             @change="validateAndChangePage"
           />

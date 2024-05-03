@@ -1,9 +1,9 @@
 <template>
-    <nav class="shadow w-full" style="background-color: #515151;">
+    <nav id="navbar" class="shadow w-full bg-neutral-600 dark:bg-neutral-900">
         <div class="flex items-center justify-between px-10 py-2 mx-auto">
 
             <div class="pl-8">
-                <router-link to="/home" class="inline-block p-0 m-0 align-middle">
+                <router-link to="/" class="inline-block p-0 m-0 align-middle">
                     <img src="/public/norlab_logo_acronym_light.png" alt="logo" class="h-auto" style="width: 11rem;">
                 </router-link>                    
             </div>
@@ -53,6 +53,7 @@
     import { onMounted } from 'vue';
     import { logout } from '@/api';
     import { useAuthStore } from '@/stores/authStore';
+    import router from '@/router'
 
     const authStore = useAuthStore();
 
@@ -60,7 +61,7 @@
         const result = await logout();
         if (result.success) {
             authStore.logout();
-            this.$router.push('/');
+            router.push({ name: 'auth' });
         } else {
             console.error(result.error);
         }
@@ -69,7 +70,6 @@
         authStore.checkAuth();
     });
   </script>
-
 <style>
 .custom-text-size {
     font-size: 1.65rem;
