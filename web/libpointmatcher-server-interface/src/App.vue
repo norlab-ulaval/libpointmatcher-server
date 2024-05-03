@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="flex flex-col h-screen ">
-    <Navbar v-if="$route.name !== 'auth'" />
+    <Navbar/>
     <main class="flex-grow w-full dark:bg-neutral-900">
       <router-view></router-view>
     </main>

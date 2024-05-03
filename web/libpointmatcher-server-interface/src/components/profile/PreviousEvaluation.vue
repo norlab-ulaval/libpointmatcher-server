@@ -53,7 +53,7 @@
               </div>
               
               <div class="grow justify-center" v-if="getBothSelected()">
-                <div class="flex flex-col h-full justify-center text-xl">
+                <div class="flex flex-col h-full justify-center text-3xl">
                   <div class="py-2">{{ "Rotation error : " + formatScore(getSelectedIteration().rotation_error) }}</div>
                   <div class="py-2">{{ "Translation error : " + formatScore(getSelectedIteration().translation_error) }}</div>
                 </div>
