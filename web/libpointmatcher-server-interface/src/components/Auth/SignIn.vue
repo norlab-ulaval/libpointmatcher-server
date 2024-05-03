@@ -1,6 +1,6 @@
 <template>
     
-    <div class="flex items-center justify-center" style="padding-top: 10%;">
+    <div class="flex items-center justify-center pt-40">
       <div class="relative w-96 max-w-md p-6 bg-white rounded-lg shadow-md dark:bg-neutral-700">
         <div class="absolute left-1/2 transform -translate-x-1/2" style="top: -4rem;">
             <img src="/public/logo.png" alt="logo" class="h-24 w-24">
