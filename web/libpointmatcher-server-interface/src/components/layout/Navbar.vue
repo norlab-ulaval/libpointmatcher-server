@@ -3,7 +3,7 @@
         <div class="flex items-center justify-between px-10 py-2 mx-auto">
 
             <div class="pl-8">
-                <router-link to="/home" class="inline-block p-0 m-0 align-middle">
+                <router-link to="/" class="inline-block p-0 m-0 align-middle">
                     <img src="/public/norlab_logo_acronym_light.png" alt="logo" class="h-auto" style="width: 11rem;">
                 </router-link>                    
             </div>
